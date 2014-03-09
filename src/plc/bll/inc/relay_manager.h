@@ -48,13 +48,13 @@ namespace bll
         static RelayManager* _instance;
         
         hal::Relay* _relay;
-       
-        
+               
         RelaySettings* _relaySettings;
         
         volatile bool _isApplicationRunning;
         
         unsigned int _temperatureRelay2TimerValue;
+
         bool _isTemperatureRelay2TimerEnabled;
         
         unsigned int _temperatureRelay3TimerValue;
@@ -104,4 +104,4 @@ namespace bll
     };
 };
 
-#endif // RELAY_MANAGER_H
+#endif

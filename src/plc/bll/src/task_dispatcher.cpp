@@ -1,10 +1,3 @@
-/*
-* task_dispatcher.cpp
-*
-* Created: 1/27/2013 11:45:34 PM
-*  Author: muhammad
-*/
-
 #include "../inc/task_dispatcher.h"
 #include "../../hal/inc/timer0.h"
 

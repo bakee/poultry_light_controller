@@ -1,10 +1,3 @@
-/*
-* menu.cpp
-*
-* Created: 1/19/2013 8:53:50 PM
-*  Author: muhammad
-*/
-
 #include "../inc/menu.h"
 #include "../inc/task_dispatcher.h"
 #include <stdio.h>
@@ -23,14 +16,6 @@ namespace bll
         0x00, 0x00, 0x00, 0x1F, 0x1F, 0x0E, 0x04, 0x00 // DownSign
     };
     
-    //************************************
-    // Method:    Menu
-    // FullName:  bll::Menu::Menu
-    // Access:    private
-    // Returns:
-    // Qualifier:
-    // Parameter: void
-    //************************************
     Menu::Menu( void )
     {
         _defaultRelaySettings = NULL;
@@ -55,14 +40,6 @@ namespace bll
         _lcdRefreshRequested = false;
     }
 
-    //************************************
-    // Method:    GetInstance
-    // FullName:  bll::Menu::GetInstance
-    // Access:    public static
-    // Returns:   Menu*
-    // Qualifier:
-    // Parameter: void
-    //************************************
     Menu* Menu::GetInstance( void )
     {
         if (_instance == NULL)
@@ -74,14 +51,6 @@ namespace bll
         return _instance;
     }
 
-    //************************************
-    // Method:    Show
-    // FullName:  bll::Menu::Show
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::Show( void )
     {
         if (_defaultRelaySettings == NULL || _newRelaySettings == NULL)
@@ -102,15 +71,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    SetRelaySettings
-    // FullName:  bll::Menu::SetRelaySettings
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: RelaySettings * defaultRelaySettings
-    // Parameter: RelaySettings * newRelaySettings
-    //************************************
     void Menu::SetRelaySettings( RelaySettings* defaultRelaySettings, RelaySettings* newRelaySettings, volatile unsigned char* autoStartTimeOutValue )
     {
         _defaultRelaySettings = defaultRelaySettings;
@@ -123,14 +83,6 @@ namespace bll
         _menuIndex = menuIndex;
     }
 
-    //************************************
-    // Method:    ShowDefaultTemperatureSetupMenu
-    // FullName:  bll::Menu::ShowDefaultTemperatureSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowDefaultTemperatureSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"Default Temperature");
@@ -147,14 +99,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowTemperatureRelay2IntervalSetupMenu
-    // FullName:  bll::Menu::ShowTemperatureRelay2IntervalSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowTemperatureRelay2IntervalSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Relay2 Interval");
@@ -171,14 +115,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowTemperatureRelay3IntervalSetupMenu
-    // FullName:  bll::Menu::ShowTemperatureRelay3IntervalSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowTemperatureRelay3IntervalSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Relay3 Interval");
@@ -195,14 +131,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowDefaultHumiditySetupMenu
-    // FullName:  bll::Menu::ShowDefaultHumiditySetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowDefaultHumiditySetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Default Humidity");
@@ -219,14 +147,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowTimer1RelayIntervalSetupMenu
-    // FullName:  bll::Menu::ShowTimer1RelayIntervalSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowTimer1RelayIntervalSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Timer-1 Interval");
@@ -243,14 +163,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowTimer2RelayIntervalSetupMenu
-    // FullName:  bll::Menu::ShowTimer2RelayIntervalSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowTimer2RelayIntervalSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Timer-2 Interval");
@@ -267,14 +179,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowTimer2RelayTurnOntimeSetupMenu
-    // FullName:  bll::Menu::ShowTimer2RelayTurnOntimeSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowTimer2RelayTurnOntimeSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"  Timer-2 On Time");
@@ -291,14 +195,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowDefaultOxygenLevelSetupMenu
-    // FullName:  bll::Menu::ShowDefaultOxygenLevelSetupMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowDefaultOxygenLevelSetupMenu( void )
     {
         sprintf(_lcdStringLine[0],"Default Oxygen Level");
@@ -315,14 +211,6 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    ShowConfirmationMenu
-    // FullName:  bll::Menu::ShowConfirmationMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowConfirmationMenu( void )
     {
         sprintf(_lcdStringLine[0],"    Confirmation");
@@ -339,14 +227,6 @@ namespace bll
         sprintf(_lcdStringLine[3],"Start      Configure");
     }
 
-    //************************************
-    // Method:    ShowDefaultMenu
-    // FullName:  bll::Menu::ShowDefaultMenu
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Menu::ShowDefaultMenu( void )
     {
         sprintf(_lcdStringLine[0],"  LIGHT CONTROLLER");

@@ -1,10 +1,3 @@
-/*
-* configuration.h
-*
-* Created: 2/2/2013 4:08:38 PM
-*  Author: muhammad
-*/
-
 #include "../../hal/inc/eeprom.h"
 #include "../inc/relay_settings.h"
 #include "../inc/menu.h"
@@ -149,4 +142,4 @@ namespace bll
     };
 };
 
-#endif /* CONFIGURATION_H_ */
+#endif

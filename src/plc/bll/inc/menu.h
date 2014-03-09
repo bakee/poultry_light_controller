@@ -1,10 +1,3 @@
-/*
-* menu.h
-*
-* Created: 1/19/2013 8:52:11 PM
-*  Author: muhammad
-*/
-
 #ifndef MENU_H_
 #define MENU_H_
 
@@ -97,4 +90,4 @@ namespace bll
     };
 };
 
-#endif /* MENU_H_ */
+#endif

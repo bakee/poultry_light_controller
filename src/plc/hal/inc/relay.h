@@ -27,69 +27,20 @@ namespace hal
         
         MC_PIN _relays[NumberOfRelays];
         
-        //************************************
-        // Method:    Relay
-        // FullName:  hal::Relay::Relay
-        // Access:    private
-        // Returns:
-        // Qualifier:
-        // Parameter: void
-        //************************************
         Relay( void );
         
-        //************************************
-        // Method:    TurnOnOrOff
-        // FullName:  hal::Relay::TurnOnOrOff
-        // Access:    private
-        // Returns:   void
-        // Qualifier:
-        // Parameter: unsigned char relayNumber
-        // Parameter: bool onOrOff
-        //************************************
         void TurnOnOrOff(unsigned char relayNumber, bool onOrOff);
 
         public:
         
-        //************************************
-        // Method:    GetInstance
-        // FullName:  hal::Relay::GetInstance
-        // Access:    public static
-        // Returns:   Relay*
-        // Qualifier:
-        // Parameter: void
-        //************************************
         static Relay* GetInstance( void );
         
-        //************************************
-        // Method:    TurnOn
-        // FullName:  hal::Relay::TurnOn
-        // Access:    public
-        // Returns:   void
-        // Qualifier:
-        // Parameter: unsigned char relayNumber
-        //************************************
         void TurnOn( unsigned char relayNumber );
         
-        //************************************
-        // Method:    TurnOff
-        // FullName:  hal::Relay::TurnOff
-        // Access:    public
-        // Returns:   void
-        // Qualifier:
-        // Parameter: unsigned char relayNumber
-        //************************************
         void TurnOff( unsigned char relayNumber );
         
-        //************************************
-        // Method:    GetState
-        // FullName:  hal::Relay::GetState
-        // Access:    public
-        // Returns:   bool
-        // Qualifier:
-        // Parameter: unsigned char relayNumber
-        //************************************
         bool GetState( unsigned char relayNumber );
     };
 };
 
-#endif // RELAY_H
+#endif

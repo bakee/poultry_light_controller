@@ -10,13 +10,6 @@ namespace hal
 {
     Relay* Relay::_instance = NULL;
     
-    //************************************
-    // Method:    Relay
-    // FullName:  hal::Relay::Relay
-    // Access:    private
-    // Returns:
-    // Qualifier:
-    //************************************
     Relay::Relay()
     {
         RELAY_MACRO(_relays, C, 0, 0);
@@ -36,13 +29,6 @@ namespace hal
         }
     }
     
-    //************************************
-    // Method:    GetInstance
-    // FullName:  hal::Relay::GetInstance
-    // Access:    public static
-    // Returns:   Relay*
-    // Qualifier:
-    //************************************
     Relay* Relay::GetInstance()
     {
         if (_instance == NULL)
@@ -54,41 +40,16 @@ namespace hal
         return _instance;
     }
 
-    //************************************
-    // Method:    TurnOn
-    // FullName:  hal::Relay::TurnOn
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: unsigned char relayNumber
-    //************************************
     void Relay::TurnOn( unsigned char relayNumber )
     {
         TurnOnOrOff(relayNumber, true);
     }
 
-    //************************************
-    // Method:    TurnOff
-    // FullName:  hal::Relay::TurnOff
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: unsigned char relayNumber
-    //************************************
     void Relay::TurnOff( unsigned char relayNumber )
     {
         TurnOnOrOff(relayNumber, false);
     }
 
-    //************************************
-    // Method:    TurnOnOrOff
-    // FullName:  hal::Relay::TurnOnOrOff
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: unsigned char relayNumber
-    // Parameter: bool onOrOff
-    //************************************
     void Relay::TurnOnOrOff( unsigned char relayNumber, bool onOrOff )
     {
         if (relayNumber >= Relay::NumberOfRelays)
@@ -106,14 +67,6 @@ namespace hal
         }
     }
 
-    //************************************
-    // Method:    GetState
-    // FullName:  hal::Relay::GetState
-    // Access:    public
-    // Returns:   bool
-    // Qualifier:
-    // Parameter: unsigned char relayNumber
-    //************************************
     bool Relay::GetState( unsigned char relayNumber )
     {
         if (relayNumber >= Relay::NumberOfRelays)

@@ -4,13 +4,6 @@ namespace hal
 {
     Led* Led::_instance = NULL;
     
-    //************************************
-    // Method:    Led
-    // FullName:  hal::Led::Led
-    // Access:    private
-    // Returns:
-    // Qualifier:
-    //************************************
     Led::Led()
     {
         _heartBeatPin.DDR = &DDRG;
@@ -22,13 +15,6 @@ namespace hal
         
     }
     
-    //************************************
-    // Method:    GetInstance
-    // FullName:  hal::Led::GetInstance
-    // Access:    public static
-    // Returns:   Led*
-    // Qualifier:
-    //************************************
     Led* Led::GetInstance()
     {
         if (_instance == NULL)
@@ -40,13 +26,6 @@ namespace hal
         return _instance;
     }
     
-    //************************************
-    // Method:    ToggleHearBeatLed
-    // FullName:  hal::Led::ToggleHearBeatLed
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    //************************************
     void Led::ToggleHearBeatLed()
     {
         if(!_isHeartBeatLedTurnedOn)

@@ -13,7 +13,6 @@
 #include "hal/inc/lcd.h"
 #include "hal/inc/timer0.h"
 
-#include "bll/inc/display.h"
 #include "bll/inc/relay_manager.h"
 #include "bll/inc/button.h"
 #include "bll/inc/menu.h"
@@ -30,19 +29,14 @@ int main()
     
     RelayManager* relayManager = RelayManager::GetInstance();
     Menu* menu = Menu::GetInstance();
-    Button::GetInstance();    
-    Display* display = Display::GetInstance();
+    Button::GetInstance();        
 
     sei();
     
     while(1)
-    {                
-        int timer2RemainingTime = relayManager->GetTimer2RemainingTime();
-        
+    {                                
         if(relayManager->GetApplicationState())
-        {
-            display->Show(timer2RemainingTime, DisplayName::Timer);
-            
+        {                       
             relayManager->ManageRelays();
         }
         

@@ -159,9 +159,6 @@
     <Compile Include="bll\src\configuration.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="bll\src\display.cpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="bll\src\menu.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -195,9 +192,6 @@
     <Compile Include="hal\inc\relay.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\inc\seven_segment.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hal\inc\timer0.h">
       <SubType>compile</SubType>
     </Compile>
@@ -217,9 +211,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\src\relay.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\src\seven_segment.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\src\timer0.cpp">
@@ -242,11 +233,6 @@
     <Folder Include="hal\inc" />
     <Folder Include="hal\src" />
     <Folder Include="cpp_fix" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bll\inc\display.h">
-      <SubType>compile</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

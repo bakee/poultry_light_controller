@@ -1,10 +1,3 @@
-/*
-* button.cpp
-*
-* Created: 1/20/2013 3:31:12 PM
-*  Author: muhammad
-*/
-
 #include "../inc/button.h"
 #include "../inc/task_dispatcher.h"
 
@@ -14,13 +7,6 @@ namespace bll
     
     Button* Button::_instance = NULL;
 
-    //************************************
-    // Method:    Button
-    // FullName:  bll::Button::Button
-    // Access:    private
-    // Returns:
-    // Qualifier:
-    //************************************
     Button::Button()
     {
         _menu = Menu::GetInstance();
@@ -58,13 +44,6 @@ namespace bll
         TaskDispatcher::GetInstance()->AddTask(FriendOnButtonLongPressed);
     }
 
-    //************************************
-    // Method:    GetInstance
-    // FullName:  bll::Button::GetInstance
-    // Access:    public static
-    // Returns:   Button*
-    // Qualifier:
-    //************************************
     Button* Button::GetInstance()
     {
         if (_instance == NULL)
@@ -76,27 +55,11 @@ namespace bll
         return _instance;
     }
 
-    //************************************
-    // Method:    OnModeButtonPressed
-    // FullName:  bll::Button::OnModeButtonPressed
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Button::OnModeButtonPressed( void )
     {
         _configuration->SetNextEventHandler();
     }
 
-    //************************************
-    // Method:    OnPlusButtonPressed
-    // FullName:  bll::Button::OnPlusButtonPressed
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Button::OnPlusButtonPressed( void )
     {
         if(_isMinusButtonPressed)
@@ -114,14 +77,6 @@ namespace bll
         _isPlusButtonPressed = false;
     }
 
-    //************************************
-    // Method:    OnMinusButtonPressed
-    // FullName:  bll::Button::OnMinusButtonPressed
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Button::OnMinusButtonPressed( void )
     {
         if(_isPlusButtonPressed)
@@ -139,14 +94,6 @@ namespace bll
         _isMinusButtonPressed = false;
     }
 
-    //************************************
-    // Method:    OnBackButtonPressed
-    // FullName:  bll::Button::OnBackButtonPressed
-    // Access:    private
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void Button::OnBackButtonPressed( void )
     {
         _configuration->SetPreviousEventHandler();
@@ -198,26 +145,11 @@ namespace bll
         }
     }
 
-    //************************************
-    // Method:    FriendOnModeButtonPressed
-    // FullName:  bll::FriendOnModeButtonPressed
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    //************************************
     void FriendOnModeButtonPressed()
     {
         Button::_instance->OnModeButtonPressed();
     }
 
-    //************************************
-    // Method:    FriendOnPlusButtonPressed
-    // FullName:  bll::FriendOnPlusButtonPressed
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void FriendOnPlusButtonPressed( void )
     {
         Button::_instance->OnPlusButtonPressed();
@@ -228,14 +160,6 @@ namespace bll
         Button::_instance->OnPlusButtonReleased();
     }
 
-    //************************************
-    // Method:    FriendOnMinusButtonPressed
-    // FullName:  bll::FriendOnMinusButtonPressed
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void FriendOnMinusButtonPressed( void )
     {
         Button::_instance->OnMinusButtonPressed();
@@ -246,14 +170,6 @@ namespace bll
         Button::_instance->OnMinusButtonReleased();
     }
 
-    //************************************
-    // Method:    FriendOnBackButtonPressed
-    // FullName:  bll::FriendOnBackButtonPressed
-    // Access:    public
-    // Returns:   void
-    // Qualifier:
-    // Parameter: void
-    //************************************
     void FriendOnBackButtonPressed( void )
     {
         Button::_instance->OnBackButtonPressed();

@@ -1,10 +1,3 @@
-/*
-* configuration.cpp
-*
-* Created: 2/2/2013 4:08:53 PM
-*  Author: muhammad
-*/
-
 #include "../inc/configuration.h"
 #include "../inc/task_dispatcher.h"
 

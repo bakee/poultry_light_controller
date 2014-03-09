@@ -1,18 +1,10 @@
 #include "../inc/relay_manager.h"
 
-
 namespace bll
 {
     using namespace hal;
     RelayManager* RelayManager::_instance = NULL;
     
-    //************************************
-    // Method:    RelayManager
-    // FullName:  bll::RelayManager::RelayManager
-    // Access:    private
-    // Returns:
-    // Qualifier:
-    //************************************
     RelayManager::RelayManager()
     {
         _relay = Relay::GetInstance();
@@ -27,14 +19,7 @@ namespace bll
         
         TaskDispatcher::GetInstance()->AddTask(FriendDecrementTimout);
     }
-    
-    //************************************
-    // Method:    GetInstance
-    // FullName:  bll::RelayManager::GetInstance
-    // Access:    public static
-    // Returns:   RelayManager*
-    // Qualifier:
-    //************************************
+
     RelayManager* RelayManager::GetInstance()
     {
         if (_instance == NULL)
