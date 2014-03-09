@@ -13,13 +13,7 @@ namespace bll
         typedef enum
         {
             TemperatureRelay1,
-            TemperatureRelay2,
-            TemperatureRelay3,
-            TemperatureRelay4,
-            HumidityRelay,
-            Timer1Relay,
-            Timer2Relay,
-            OxygenRelay
+            TemperatureRelay2
         } ERelayName;
     };
     
@@ -28,14 +22,10 @@ namespace bll
         public:
         typedef enum
         {
-            DefaultTemperature,
-            TemperatureRelay2Interval,
-            TemperatureRelay3Interval,
-            DefaultHumidity,
-            Timer1RelayInterval,
-            Timer2RelayInterval,
-            Timer2TurnOntime,
-            DefaultOxygenLevel
+            FirstTimeOn,
+            FirstTimeOff,
+            SecondTimeOn,
+            SecondTimeOff
         } ESetupState;
     };
     
@@ -68,15 +58,7 @@ namespace bll
         
         RelayManager( void );
         
-        void DecrementTimeout( void );
-        
-        TemperatureRelaySettings _temperatureRelay1Settings;
-        
-        TemperatureRelaySettings _temperatureRelay2Settings;
-        
-        TemperatureRelaySettings _temperatureRelay3Settings;
-        
-        TemperatureRelaySettings _temperatureRelay4Settings;
+        void DecrementTimeout( void );        
         
         public:
         
@@ -94,9 +76,7 @@ namespace bll
         
         void ManageRelays( void );
         
-        void SetRelaySettings( RelaySettings* relaySettings );
-        
-        void UpdateTimeoutValues( void );
+        void SetRelaySettings( RelaySettings* relaySettings );       
         
         unsigned int GetTimer2RemainingTime( void );
         

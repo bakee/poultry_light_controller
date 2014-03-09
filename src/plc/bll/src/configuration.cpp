@@ -629,7 +629,6 @@ namespace bll
         SetToDefaultState();
         
         RefreshMenuTimeout();
-        _relayManager->UpdateTimeoutValues();
     }
 
     void Configuration::DiscardChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )

@@ -21,18 +21,4 @@ typedef struct
     
 } RelaySettings;
 
-typedef struct 
-{
-    unsigned int temperature;
-
-    unsigned char higherOffset;
-
-    unsigned char lowerOffset;
-
-    unsigned int passedTime;
-
-    bool IsFlowDirectionHigh;
-
-} TemperatureRelaySettings ;
-
 #endif
