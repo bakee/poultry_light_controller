@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>6.1</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
+    <ProjectGuid>{a3dcb058-a262-49b3-a78d-0678a0d2158c}</ProjectGuid>
+    <avrdevice>ATmega64</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>CPP</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>plc</AssemblyName>
+    <Name>plc</Name>
+    <RootNamespace>plc</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <OverrideVtorValue />
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <AsfVersion>2.11.1</AsfVersion>
+    <avrtoolinterface />
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolName>AVR Simulator</ToolName>
+      <ToolNumber>
+      </ToolNumber>
+      <KeepTimersRunning>true</KeepTimersRunning>
+      <OverrideVtor>false</OverrideVtor>
+      <OverrideVtorValue>
+      </OverrideVtorValue>
+      <Channel>
+        <host>127.0.0.1</host>
+        <port>1086</port>
+        <ssl>False</ssl>
+      </Channel>
+    </com_atmel_avrdbg_tool_simulator>
+    <AsfFrameworkConfig>
+      <framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.3.0" />
+  </dependencies>
+</framework-data>
+    </AsfFrameworkConfig>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <CacheFlash>true</CacheFlash>
+    <UncachedRange />
+    <BootSegment>0</BootSegment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrGccCpp xmlns="">
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.optimization.level>Optimize most (-O3)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcccpp.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcccpp.compiler.symbols.DefSymbols>
+        <avrgcccpp.compiler.optimization.level>Optimize most (-O3)</avrgcccpp.compiler.optimization.level>
+        <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+        <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+        <avrgcccpp.linker.libraries.Libraries>
+          <ListValues>
+            <Value>libm</Value>
+          </ListValues>
+        </avrgcccpp.linker.libraries.Libraries>
+        <avrgcccpp.linker.memorysettings.Comment>&lt;segmentname&gt;=&lt;address&gt;, for example  .boot=0xff</avrgcccpp.linker.memorysettings.Comment>
+      </AvrGccCpp>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrGccCpp xmlns="">
+        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcc.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcc.compiler.symbols.DefSymbols>
+        <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+        <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+        <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+        <avrgcccpp.compiler.symbols.DefSymbols>
+          <ListValues>
+            <Value>F_CPU=16000000UL</Value>
+          </ListValues>
+        </avrgcccpp.compiler.symbols.DefSymbols>
+        <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+        <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+        <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+        <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+        <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+        <avrgcccpp.linker.libraries.Libraries>
+          <ListValues>
+            <Value>libm</Value>
+          </ListValues>
+        </avrgcccpp.linker.libraries.Libraries>
+        <avrgcccpp.linker.memorysettings.Comment>&lt;segmentname&gt;=&lt;address&gt;, for example  .boot=0xff</avrgcccpp.linker.memorysettings.Comment>
+        <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+      </AvrGccCpp>
+    </ToolchainSettings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="bll\inc\button.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\configuration.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\menu.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\relay_manager.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\relay_settings.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\sensor.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\inc\task_dispatcher.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\button.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\configuration.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\display.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\menu.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\relay_manager.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\sensor.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="bll\src\task_dispatcher.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="cpp_fix\inc\cpp_fix.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="cpp_fix\src\cpp_fix.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\adc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\ds18b20.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\eeprom.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\hal_utils.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\hsm20g.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\lcd.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\led.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\pin_interrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\relay.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\seven_segment.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\timer0.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\inc\timer2.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\adc.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\ds18b20.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\eeprom.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\hsm20g.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\lcd.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\led.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\pin_interrupt.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\relay.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\seven_segment.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\timer0.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hal\src\timer2.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="plc.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bll\inc" />
+    <Folder Include="bll\src" />
+    <Folder Include="cpp_fix\inc" />
+    <Folder Include="cpp_fix\src" />
+    <Folder Include="hal" />
+    <Folder Include="bll" />
+    <Folder Include="hal\inc" />
+    <Folder Include="hal\src" />
+    <Folder Include="cpp_fix" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bll\inc\display.h">
+      <SubType>compile</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

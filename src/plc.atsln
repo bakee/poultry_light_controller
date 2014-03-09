@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "plc", "plc\plc.cppproj", "{A3DCB058-A262-49B3-A78D-0678A0D2158C}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3DCB058-A262-49B3-A78D-0678A0D2158C}.Debug|AVR.ActiveCfg = Debug|AVR
+		{A3DCB058-A262-49B3-A78D-0678A0D2158C}.Debug|AVR.Build.0 = Debug|AVR
+		{A3DCB058-A262-49B3-A78D-0678A0D2158C}.Release|AVR.ActiveCfg = Release|AVR
+		{A3DCB058-A262-49B3-A78D-0678A0D2158C}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
