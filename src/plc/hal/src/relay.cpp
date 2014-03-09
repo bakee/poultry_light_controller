@@ -14,12 +14,6 @@ namespace hal
     {
         RELAY_MACRO(_relays, C, 0, 0);
         RELAY_MACRO(_relays, C, 1, 1);
-        RELAY_MACRO(_relays, C, 2, 2);
-        RELAY_MACRO(_relays, C, 3, 3);
-        RELAY_MACRO(_relays, C, 4, 4);
-        RELAY_MACRO(_relays, C, 5, 5);
-        RELAY_MACRO(_relays, C, 6, 6);
-        RELAY_MACRO(_relays, C, 7, 7);
 
         // DDR Initializations
 

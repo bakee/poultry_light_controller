@@ -9,12 +9,6 @@ namespace hal
     {
         MC_PIN TemperatureRelay1;
         MC_PIN TemperatureRelay2;
-        MC_PIN TemperatureRelay3;
-        MC_PIN TemperatureRelay4;
-        MC_PIN HumidityRelay;
-        MC_PIN Timer1Relay;
-        MC_PIN Timer2Relay;
-        MC_PIN OxygenRelay;
     } RELAY_PIN;
 
     class Relay
@@ -23,7 +17,7 @@ namespace hal
         
         static Relay* _instance;
         
-        static const unsigned char NumberOfRelays = 8;
+        static const unsigned char NumberOfRelays = 2;
         
         MC_PIN _relays[NumberOfRelays];
         
