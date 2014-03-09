@@ -40,14 +40,14 @@
     </com_atmel_avrdbg_tool_simulator>
     <AsfFrameworkConfig>
       <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.3.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.3.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
     <ProgFlashFromRam>true</ProgFlashFromRam>
     <RamSnippetAddress>0x20000000</RamSnippetAddress>
@@ -150,9 +150,6 @@
     <Compile Include="bll\inc\relay_settings.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="bll\inc\sensor.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="bll\inc\task_dispatcher.h">
       <SubType>compile</SubType>
     </Compile>
@@ -171,9 +168,6 @@
     <Compile Include="bll\src\relay_manager.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="bll\src\sensor.cpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="bll\src\task_dispatcher.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -183,19 +177,10 @@
     <Compile Include="cpp_fix\src\cpp_fix.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\inc\adc.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\inc\ds18b20.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hal\inc\eeprom.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\inc\hal_utils.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\inc\hsm20g.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\inc\lcd.h">
@@ -219,16 +204,7 @@
     <Compile Include="hal\inc\timer2.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="hal\src\adc.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\src\ds18b20.cpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="hal\src\eeprom.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="hal\src\hsm20g.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hal\src\lcd.cpp">

@@ -9,7 +9,6 @@
 #define MENU_H_
 
 #include "../../hal/inc/lcd.h"
-#include "../inc/sensor.h"
 #include "../inc/relay_settings.h"
 
 namespace bll

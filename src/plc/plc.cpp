@@ -1,7 +1,7 @@
 /*
 * plc.cpp
 *
-* Created: 1/2/2013 9:10:37 PM
+* Created: 3/10/2014 12:40:37 AM
 *  Author: muhammad
 */
 
@@ -13,7 +13,6 @@
 #include "hal/inc/lcd.h"
 #include "hal/inc/timer0.h"
 
-#include "bll/inc/sensor.h"
 #include "bll/inc/display.h"
 #include "bll/inc/relay_manager.h"
 #include "bll/inc/button.h"
@@ -31,22 +30,17 @@ int main()
     
     RelayManager* relayManager = RelayManager::GetInstance();
     Menu* menu = Menu::GetInstance();
-    Button::GetInstance();
-    Sensor* sensor = Sensor::GetInstance();
+    Button::GetInstance();    
     Display* display = Display::GetInstance();
 
     sei();
     
     while(1)
-    {
-        int currentTemperature = sensor->GetTemperature();
-        int currentHumidity = sensor->GetHumidity();
+    {                
         int timer2RemainingTime = relayManager->GetTimer2RemainingTime();
         
         if(relayManager->GetApplicationState())
         {
-            display->Show(currentTemperature, DisplayName::Temperature);
-            display->Show(currentHumidity, DisplayName::Humidity);
             display->Show(timer2RemainingTime, DisplayName::Timer);
             
             relayManager->ManageRelays();

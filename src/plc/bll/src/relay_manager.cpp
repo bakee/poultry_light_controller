@@ -16,7 +16,6 @@ namespace bll
     RelayManager::RelayManager()
     {
         _relay = Relay::GetInstance();
-        _sensor = Sensor::GetInstance();
         
         _isApplicationRunning = false;
         
@@ -68,56 +67,6 @@ namespace bll
         if(!_isApplicationRunning)
         {
             return;
-        }
-        
-        const unsigned char temperatureOffset = 5;
-        
-        unsigned int temperature = _sensor->GetTemperature();
-        
-        // Temperature relay Handling for cooling
-        if(temperature > (_relaySettings->defaultTemperature + temperatureOffset))
-        {
-            TurnOn(RelayName::TemperatureRelay4);
-        }
-        else if (temperature <= _relaySettings->defaultTemperature)
-        {
-            TurnOff(RelayName::TemperatureRelay4);
-        }
-        
-        
-        // Temperature relay Handling for heating (first level)
-        if(temperature < (_relaySettings->defaultTemperature - temperatureOffset))
-        {
-            TurnOn(RelayName::TemperatureRelay1);
-            
-            if (!_isTemperatureRelay2TimerEnabled)
-            {
-                _temperatureRelay2TimerValue = _relaySettings->temperatureRelay2Interval;
-                _isTemperatureRelay2TimerEnabled = true;
-            }
-        }
-        else if(temperature >= _relaySettings->defaultTemperature)
-        {
-            _isTemperatureRelay2TimerEnabled = false;
-            _isTemperatureRelay3TimerEnabled = false;
-            TurnOff(RelayName::TemperatureRelay1);
-            TurnOff(RelayName::TemperatureRelay2);
-            TurnOff(RelayName::TemperatureRelay3);
-        }
-        
-        // Humidity relay handling
-        
-        const unsigned char humidityOffset = 5;
-        
-        unsigned int humidity = _sensor->GetHumidity();
-        
-        if(humidity < (_relaySettings->defaultHumidity - humidityOffset))
-        {
-            TurnOn(RelayName::HumidityRelay);
-        }
-        else if(humidity > (_relaySettings->defaultHumidity + humidityOffset))
-        {
-            TurnOff(RelayName::HumidityRelay);
         }
     }
     

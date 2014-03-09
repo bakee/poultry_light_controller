@@ -4,7 +4,6 @@
 #include "../../hal/inc/relay.h"
 #include "../inc/task_dispatcher.h"
 #include "../inc/relay_settings.h"
-#include "../inc/sensor.h"
 
 namespace bll
 {
@@ -49,8 +48,7 @@ namespace bll
         static RelayManager* _instance;
         
         hal::Relay* _relay;
-        
-        Sensor* _sensor;
+       
         
         RelaySettings* _relaySettings;
         
