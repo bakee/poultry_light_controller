@@ -349,7 +349,7 @@ namespace bll
     //************************************
     void Menu::ShowDefaultMenu( void )
     {
-        sprintf(_lcdStringLine[0]," ADHUNIK  INCUBATOR");
+        sprintf(_lcdStringLine[0],"  LIGHT CONTROLLER");
         sprintf(_lcdStringLine[1]," ");
         sprintf(_lcdStringLine[2],"Mobile: 01714228422");
         sprintf(_lcdStringLine[3]," ");
@@ -358,8 +358,8 @@ namespace bll
     void Menu::ShowFirmwareVersionMenu( void )
     {
         sprintf(_lcdStringLine[0],"      PSolvers");
-        sprintf(_lcdStringLine[1],"Incubator Controller");
-        sprintf(_lcdStringLine[2],"    Version: 1.2");
+        sprintf(_lcdStringLine[1],"  Light Controller");
+        sprintf(_lcdStringLine[2],"    Version: 1.0");
         sprintf(_lcdStringLine[3],"  www.psolvers.com");
         
         Lcd* lcd = Lcd::GetInstance();
