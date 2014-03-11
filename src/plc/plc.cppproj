@@ -153,6 +153,9 @@
     <Compile Include="bll\inc\task_dispatcher.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="bll\inc\relay_time.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="bll\src\button.cpp">
       <SubType>compile</SubType>
     </Compile>

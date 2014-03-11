@@ -5,29 +5,17 @@
 #define NULL 0
 #endif
 
-#define DEFAULT_TEMPERATURE_LOWEST_VALUE 1 // Min value is 0.1 degree C/F
-#define DEFAULT_TEMPERATURE_HIGHEST_VALUE 1999 // Max value is 199.9 degree C/F
+#define START_TIME_1_HOUR_VALUE 3 // 3 for 03:xx AM
+#define START_TIME_1_MINUTE_VALUE 0 // 0 for xx:00 XM
 
-#define TEMPERATURE_RELAY2_LOWEST_VALUE 1 // Min value is 0:00:01
-#define TEMPERATURE_RELAY2_HIGHEST_VALUE 3599 // Max value is 0:59:59
+#define END_TIME_1_HOUR_VALUE 6 // 6 for 06:xx AM
+#define END_TIME_1_MINUTE_VALUE 0 // 0 for xx:00 XM
 
-#define TEMPERATURE_RELAY3_LOWEST_VALUE 1 // Min value is 0:00:01
-#define TEMPERATURE_RELAY3_HIGHEST_VALUE 3599 // Max value is 0:59:59
+#define START_TIME_2_HOUR_VALUE 17 // 17 for 05:xx PM
+#define START_TIME_2_MINUTE_VALUE 00 // 0 for xx:00 XM
 
-#define DEFAULT_HUMIDITY_LOWEST_VALUE 1 // Min value is 0.1% RH
-#define DEFAULT_HUMIDITY_HIGHEST_VALUE 1999 // Max value is 199.9% RH
-
-#define TIMER1_RELAY_INTERVAL_LOWEST_VALUE 1 // Min value is 0:00:01
-#define TIMER1_RELAY_INTERVAL_HIGHEST_VALUE 3599 // Max value is 0:59:99
-
-#define TIMER2_RELAY_INTERVAL_LOWEST_VALUE 6 // Min value is 00:01:00
-#define TIMER2_RELAY_INTERVAL_HIGHEST_VALUE 719 // Max value is 11:59:00
-
-#define TIMER2_TURN_ON_TIME_LOWEST_VALUE 1 // Min value is 0:00:01
-#define TIMER2_TURN_ON_TIME_HIGHEST_VALUE 300 // Max value is 0:05:00
-
-#define DEFAULT_OXYGEN_LEVEL_LOWEST_VALUE 1 // Min value is 0.1%
-#define  DEFAULT_OXYGEN_LEVEL_HIGHEST_VALUE 1999 // Max value is 199.9%
+#define END_TIME_2_HOUR_VALUE 21 // 21 for 09:xx PM
+#define END_TIME_2_MINUTE_VALUE 0 // 0 for xx:00 XM
 
 namespace bll
 {

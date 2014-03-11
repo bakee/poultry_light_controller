@@ -1,24 +1,12 @@
 #ifndef RELAY_SETTINGS_H_
 #define RELAY_SETTINGS_H_
 
+#include "relay_time.h"
+
+#define NUMBER_OF_SETTINGS 2
 typedef struct
 {
-    unsigned int defaultTemperature;
-
-    unsigned int defaultHumidity;
-
-    unsigned int defaultOxygenLevel;
-    
-    unsigned int temperatureRelay2Interval;
-
-    unsigned int temperatureRelay3Interval;
-    
-    unsigned int timer1RelayInterval;
-
-    unsigned int timer2RelayInterval;
-
-    unsigned int timer2TurnOntime;
-    
+    RelayTime relayTimes[NUMBER_OF_SETTINGS];
 } RelaySettings;
 
 #endif
