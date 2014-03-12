@@ -59,7 +59,7 @@ namespace bll
         
         ButtonHandler _onDecrease;
         
-        static const unsigned char NumberOfState = 8;
+        static const unsigned char NumberOfState = 5;
         
         ButtonHandler _increaseHandler[NumberOfState];
         
@@ -80,7 +80,10 @@ namespace bll
         void WriteDefaultValuesToEeprom( void );
         
         void DecrementConfigurationTimeout( void );
-        
+	void FormatDisplayTime(int number);
+	unsigned char GetIncrementAmount(
+			IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType);
+
         public:
         
         static Configuration* GetInstance( void );
@@ -93,10 +96,18 @@ namespace bll
 
         void SetDecreaseHandler( ButtonHandler decreaseHandler );
         
-        void IncreaseDefaultTemperature( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void IncreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType, int number);
+
+        void DecreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType, int number);
+
+        void IncreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void IncreaseTemperatureRelay2Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void IncreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+
+        void IncreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
+        void IncreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+
         void IncreaseTemperatureRelay3Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
         void IncreaseDefaultHumidity( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
@@ -113,13 +124,13 @@ namespace bll
         
         void DiscardChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseDefaultTemperature( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseTemperatureRelay2Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseTemperatureRelay3Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseDefaultHumidity( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
         void DecreaseTimer1RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         

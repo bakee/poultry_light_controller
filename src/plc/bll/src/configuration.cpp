@@ -17,754 +17,424 @@
 #define END_TIME_2_HOUR_VALUE 21 // 21 for 09:xx PM
 #define END_TIME_2_MINUTE_VALUE 0 // 0 for xx:00 XM
 
+#define MAXIMUM_MINUTES 1439 // 11:59 PM
+#define MINIMUM_MINUTES 0 // 12:00 AM
+
+
 namespace bll
 {
-    
-    using namespace hal;
-    
-    Configuration* Configuration::_instance = NULL;
 
-    Configuration::Configuration( void )
-    {
-        _autoStartTimeOutValue = MenuTimeoutValue;
-        
-        _menu = Menu::GetInstance();
-        _menu->SetRelaySettings(&_relaySettings, &_temporaryRelaySettings, &_autoStartTimeOutValue);
-        
-        _relayManager = RelayManager::GetInstance();
-        
-        GetDefaultValues();
-        _temporaryRelaySettings = _relaySettings;
-        _relayManager->SetRelaySettings(&_relaySettings);
-        
-        _eeprom = Eeprom::GetInstance();
-        _onIncrease = NULL;
-        _onDecrease = NULL;
-        
-        _increaseHandler[0] = &Configuration::IncreaseDefaultTemperature;
-        _increaseHandler[1] = &Configuration::IncreaseTemperatureRelay2Interval;
-        _increaseHandler[2] = &Configuration::IncreaseTemperatureRelay3Interval;
-        _increaseHandler[3] = &Configuration::IncreaseDefaultHumidity;
-        _increaseHandler[4] = &Configuration::IncreaseTimer1RelayInterval;
-        _increaseHandler[5] = &Configuration::IncreaseTimer2RelayInterval;
-        _increaseHandler[6] = &Configuration::IncreaseTimer2TurnOntime;
-        //_increaseHandler[7] = &Configuration::IncreaseDefaultOxygenLevel;
-        _increaseHandler[7] = &Configuration::SaveChanges;
-        
-        _decreaseHandler[0] = &Configuration::DecreaseDefaultTemperature;
-        _decreaseHandler[1] = &Configuration::DecreaseTemperatureRelay2Interval;
-        _decreaseHandler[2] = &Configuration::DecreaseTemperatureRelay3Interval;
-        _decreaseHandler[3] = &Configuration::DecreaseDefaultHumidity;
-        _decreaseHandler[4] = &Configuration::DecreaseTimer1RelayInterval;
-        _decreaseHandler[5] = &Configuration::DecreaseTimer2RelayInterval;
-        _decreaseHandler[6] = &Configuration::DecreaseTimer2TurnOntime;
-        //_decreaseHandler[7] = &Configuration::DecreaseDefaultOxygenLevel;
-        _decreaseHandler[7] = &Configuration::DiscardChanges;
-        
-        _state = NumberOfState;
-        _menuTimeout = 0;
-        
-        TaskDispatcher::GetInstance()->AddTask(FriendDecrementConfigurationTimeout);
-    }
+	using namespace hal;
 
-    Configuration* Configuration::GetInstance( void )
-    {
-        if(_instance == NULL)
-        {
-            static Configuration object;
-            _instance = &object;
-        }
-        
-        return _instance;
-    }
-    
-    void Configuration::IncreaseValue( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        if(_relayManager->GetApplicationState())
-        {
-            return;
-        }
-        
-        if (_onIncrease != NULL)
-        {
-            RefreshMenuTimeout();
-            
-            (this->*_onIncrease)(increaseDecreaseType);
-        }
-    }
+	Configuration* Configuration::_instance = NULL;
 
-    void Configuration::DecreaseValue( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        if(_relayManager->GetApplicationState())
-        {
-            return;
-        }
-        
-        if (_onDecrease != NULL)
-        {
-            RefreshMenuTimeout();
-            
-            (this->*_onDecrease)(increaseDecreaseType);
-        }
-    }
+	Configuration::Configuration( void )
+	{
+		_autoStartTimeOutValue = MenuTimeoutValue;
 
-    void Configuration::SetNextEventHandler()
-    {
-        RefreshMenuTimeout();
-        
-        if (_state == NumberOfState - 1) // Confirmation state
-        {
-            return; // Do nothing, this button is disabled
-        }
-        else if(_state == NumberOfState) // Default state
-        {
-            _state = 0; // Set to first configuration menu
-        }
-        else if(_state == NumberOfState - 2) // Before confirmation state
-        {
-            if(_relayManager->GetApplicationState() == true || // Either application is running or
-            (_temporaryRelaySettings.defaultHumidity == _relaySettings.defaultHumidity
-            && _temporaryRelaySettings.defaultOxygenLevel == _relaySettings.defaultOxygenLevel
-            && _temporaryRelaySettings.defaultTemperature == _relaySettings.defaultTemperature
-            && _temporaryRelaySettings.temperatureRelay2Interval == _relaySettings.temperatureRelay2Interval
-            && _temporaryRelaySettings.temperatureRelay3Interval == _relaySettings.temperatureRelay3Interval
-            && _temporaryRelaySettings.timer1RelayInterval == _relaySettings.timer1RelayInterval
-            && _temporaryRelaySettings.timer2RelayInterval == _relaySettings.timer2RelayInterval
-            && _temporaryRelaySettings.timer2TurnOntime == _relaySettings.timer2TurnOntime)) // No changes have been made
-            {
-                SetToDefaultState();
-            }
-            else
-            {
-                _state++; // Move to confirmation state
-            }
-        }
-        else
-        {
-            _state++; // Move to next configuration menu
-        }
-        
-        _onIncrease = _increaseHandler[_state];
-        _onDecrease = _decreaseHandler[_state];
-        
-        if(_state == NumberOfState)
-        {
-            SetToDefaultState();
-        }
-        else
-        {
-            _menu->SetMenuMode(_state);
-        }
-    }
+		_menu = Menu::GetInstance();
+		_menu->SetRelaySettings(&_relaySettings, &_temporaryRelaySettings, &_autoStartTimeOutValue);
 
-    void Configuration::SetPreviousEventHandler()
-    {
-        RefreshMenuTimeout();
-        
-        if(_relayManager->GetApplicationState() == false && _state == NumberOfState) // Application is not running
-        {
-            _autoStartTimeOutValue = 0;
-            _relayManager->StartManagingRelays();
-            SetToDefaultState();
-            return;
-        }
-        
-        if(_state == NumberOfState || _state == 0) // Default state, disable this button
-        {
-            return;
-        }
-        else if(_state == 0)
-        {
-            SetToDefaultState();
-        }
-        else
-        {
-            _state--;
-            _onIncrease = _increaseHandler[_state];
-            _onDecrease = _decreaseHandler[_state];
-        }
-        
-        _menu->SetMenuMode(_state);
-    }
+		_relayManager = RelayManager::GetInstance();
 
-    void Configuration::IncreaseDefaultTemperature( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.defaultTemperature += incrementAmount;
-        
-        if (_temporaryRelaySettings.defaultTemperature > DEFAULT_TEMPERATURE_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.defaultTemperature = DEFAULT_TEMPERATURE_HIGHEST_VALUE;
-        }
-    }
+		GetDefaultValues();
+		_temporaryRelaySettings = _relaySettings;
+		_relayManager->SetRelaySettings(&_relaySettings);
 
-    void Configuration::IncreaseTemperatureRelay2Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.temperatureRelay2Interval += incrementAmount;
-        
-        if (_temporaryRelaySettings.temperatureRelay2Interval > TEMPERATURE_RELAY2_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.temperatureRelay2Interval = TEMPERATURE_RELAY2_HIGHEST_VALUE;
-        }
-    }
+		_eeprom = Eeprom::GetInstance();
+		_onIncrease = NULL;
+		_onDecrease = NULL;
 
-    void Configuration::IncreaseTemperatureRelay3Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.temperatureRelay3Interval += incrementAmount;
-        
-        if (_temporaryRelaySettings.temperatureRelay3Interval > TEMPERATURE_RELAY3_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.temperatureRelay3Interval = TEMPERATURE_RELAY3_HIGHEST_VALUE;
-        }
-    }
+		_increaseHandler[0] = &Configuration::IncreaseStartTime1Value;
+		_increaseHandler[1] = &Configuration::IncreaseEndTime1Value;
+		_increaseHandler[2] = &Configuration::IncreaseStartTime2Value;
+		_increaseHandler[3] = &Configuration::IncreaseEndTime2Value;
+		_increaseHandler[4] = &Configuration::SaveChanges;
 
-    void Configuration::IncreaseDefaultHumidity( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.defaultHumidity += incrementAmount;
-        
-        
-        if (_temporaryRelaySettings.defaultHumidity > DEFAULT_HUMIDITY_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.defaultHumidity = DEFAULT_HUMIDITY_HIGHEST_VALUE;
-        }
-    }
+		_decreaseHandler[0] = &Configuration::DecreaseStartTime1Value;
+		_decreaseHandler[1] = &Configuration::DecreaseEndTime1Value;
+		_decreaseHandler[2] = &Configuration::DecreaseStartTime2Value;
+		_decreaseHandler[3] = &Configuration::DecreaseEndTime2Value;
+		_decreaseHandler[4] = &Configuration::DiscardChanges;
 
-    void Configuration::IncreaseTimer1RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.timer1RelayInterval += incrementAmount;
-        
-        if (_temporaryRelaySettings.timer1RelayInterval > TIMER1_RELAY_INTERVAL_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.timer1RelayInterval = TIMER1_RELAY_INTERVAL_HIGHEST_VALUE;
-        }
-    }
+		_state = NumberOfState;
+		_menuTimeout = 0;
 
-    void Configuration::IncreaseTimer2RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.timer2RelayInterval += incrementAmount;
-        
-        if (_temporaryRelaySettings.timer2RelayInterval > TIMER2_RELAY_INTERVAL_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.timer2RelayInterval = TIMER2_RELAY_INTERVAL_HIGHEST_VALUE;
-        }
-    }
+		TaskDispatcher::GetInstance()->AddTask(FriendDecrementConfigurationTimeout);
+	}
 
-    void Configuration::IncreaseTimer2TurnOntime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.timer2TurnOntime += incrementAmount;
-        
-        if (_temporaryRelaySettings.timer2TurnOntime > TIMER2_TURN_ON_TIME_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.timer2TurnOntime = TIMER2_TURN_ON_TIME_HIGHEST_VALUE;
-        }
-    }
+	Configuration* Configuration::GetInstance( void )
+	{
+		if(_instance == NULL)
+		{
+			static Configuration object;
+			_instance = &object;
+		}
 
-    void Configuration::IncreaseDefaultOxygenLevel( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char incrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            incrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            incrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            incrementAmount = 1;
-            break;
-        }
-        
-        _temporaryRelaySettings.defaultOxygenLevel += incrementAmount;
-        
-        if (_temporaryRelaySettings.defaultOxygenLevel > DEFAULT_OXYGEN_LEVEL_HIGHEST_VALUE)
-        {
-            _temporaryRelaySettings.defaultOxygenLevel = DEFAULT_OXYGEN_LEVEL_HIGHEST_VALUE;
-        }
-    }
+		return _instance;
+	}
 
-    void Configuration::DecreaseDefaultTemperature( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.defaultTemperature <= (decrementAmount + (unsigned int)DEFAULT_TEMPERATURE_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.defaultTemperature = DEFAULT_TEMPERATURE_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.defaultTemperature -= decrementAmount;
-        }
-    }
+	void Configuration::IncreaseValue( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		if(_relayManager->GetApplicationState())
+		{
+			return;
+		}
 
-    void Configuration::DecreaseTemperatureRelay2Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.temperatureRelay2Interval <= (decrementAmount + (unsigned int)TEMPERATURE_RELAY2_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.temperatureRelay2Interval = TEMPERATURE_RELAY2_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.temperatureRelay2Interval -= decrementAmount;
-        }
-    }
+		if (_onIncrease != NULL)
+		{
+			RefreshMenuTimeout();
 
-    void Configuration::DecreaseTemperatureRelay3Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.temperatureRelay3Interval <= (decrementAmount + (unsigned int)TEMPERATURE_RELAY3_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.temperatureRelay3Interval = TEMPERATURE_RELAY3_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.temperatureRelay3Interval -= decrementAmount;
-        }
-    }
+			(this->*_onIncrease)(increaseDecreaseType);
+		}
+	}
 
-    void Configuration::DecreaseDefaultHumidity( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.defaultHumidity <= (decrementAmount + (unsigned int)DEFAULT_HUMIDITY_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.defaultHumidity = DEFAULT_HUMIDITY_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.defaultHumidity -= decrementAmount;
-        }
-    }
+	void Configuration::DecreaseValue( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		if(_relayManager->GetApplicationState())
+		{
+			return;
+		}
 
-    void Configuration::DecreaseTimer1RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.timer1RelayInterval <= (decrementAmount + (unsigned int)TIMER1_RELAY_INTERVAL_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.timer1RelayInterval = TIMER1_RELAY_INTERVAL_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.timer1RelayInterval -= decrementAmount;
-        }
-    }
+		if (_onDecrease != NULL)
+		{
+			RefreshMenuTimeout();
 
-    void Configuration::DecreaseTimer2RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.timer2RelayInterval <= (decrementAmount + (unsigned int)TIMER2_RELAY_INTERVAL_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.timer2RelayInterval = TIMER2_RELAY_INTERVAL_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.timer2RelayInterval -= decrementAmount;
-        }
-    }
+			(this->*_onDecrease)(increaseDecreaseType);
+		}
+	}
 
-    void Configuration::DecreaseTimer2TurnOntime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.timer2TurnOntime <= (decrementAmount + (unsigned int)TIMER2_TURN_ON_TIME_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.timer2TurnOntime = TIMER2_TURN_ON_TIME_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.timer2TurnOntime -= decrementAmount;
-        }
-    }
+	void Configuration::SetNextEventHandler()
+	{
+		RefreshMenuTimeout();
 
-    void Configuration::DecreaseDefaultOxygenLevel( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        unsigned char decrementAmount = 0;
-        switch(increaseDecreaseType)
-        {
-            case IncreaseDecreaseType::Fast:
-            decrementAmount = 10;
-            break;
-            case IncreaseDecreaseType::Faster:
-            decrementAmount = 10;
-            break;
-            default:
-            case IncreaseDecreaseType::Normal:
-            decrementAmount = 1;
-            break;
-        }
-        
-        if (_temporaryRelaySettings.defaultOxygenLevel <= (decrementAmount + (unsigned int)DEFAULT_OXYGEN_LEVEL_LOWEST_VALUE))
-        {
-            _temporaryRelaySettings.defaultOxygenLevel = DEFAULT_OXYGEN_LEVEL_LOWEST_VALUE;
-        }
-        else
-        {
-            _temporaryRelaySettings.defaultOxygenLevel -= decrementAmount;
-        }
-    }
-    
-    void Configuration::SaveChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        // If application is running this will not be executed, but for more safety (!), return
-        if(_relayManager->GetApplicationState() == true)
-        {
-            return;
-        }
-        
-        _relaySettings = _temporaryRelaySettings;
-        WriteDefaultValuesToEeprom();
-        SetToDefaultState();
-        
-        RefreshMenuTimeout();
-    }
+		if (_state == NumberOfState - 1) // Confirmation state
+		{
+			return; // Do nothing, this button is disabled
+		}
+		else if(_state == NumberOfState) // Default state
+		{
+			_state = 0; // Set to first configuration menu
+		}
+		else if(_state == NumberOfState - 2) // Before confirmation state
+		{
+			if(_relayManager->GetApplicationState() == true || // Either application is running or
+			(		   _temporaryRelaySettings.relayTimes[0].totalMinutes == _relaySettings.relayTimes[0].totalMinutes
+			&& _temporaryRelaySettings.relayTimes[1].totalMinutes == _relaySettings.relayTimes[1].totalMinutes
+			&& _temporaryRelaySettings.relayTimes[2].totalMinutes == _relaySettings.relayTimes[2].totalMinutes
+			&& _temporaryRelaySettings.relayTimes[3].totalMinutes == _relaySettings.relayTimes[3].totalMinutes)) // No changes have been made
+			{
+				SetToDefaultState();
+			}
+			else
+			{
+				_state++; // Move to confirmation state
+			}
+		}
+		else
+		{
+			_state++; // Move to next configuration menu
+		}
 
-    void Configuration::DiscardChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
-    {
-        _temporaryRelaySettings = _relaySettings;
-        SetToDefaultState();
-        if(_relayManager->GetApplicationState() == false)
-        {
-            RefreshMenuTimeout();
-        }
-    }
-    
-    bool Configuration::ReadDefaultValuesFromEeprom( void )
-    {
-        unsigned char calculatedCheckSum = 0x00;
-        unsigned int eepromCheckSumAddress = 0x01;
-        unsigned int startingMemoryAddress = 0x02;
-        unsigned int dataMemoryPosition = (unsigned int)&_relaySettings;
-        
-        for (unsigned int i = 0; i < sizeof(RelaySettings); ++i)
-        {
-            *((unsigned char *)(dataMemoryPosition + i)) = _eeprom->Read(startingMemoryAddress + i);
-            calculatedCheckSum += *((unsigned char *)(dataMemoryPosition + i));
-        }
-        
-        unsigned char readCheckSum = _eeprom->Read(eepromCheckSumAddress);
-        
-        if(
-        readCheckSum != calculatedCheckSum ||
-        _relaySettings.defaultTemperature < DEFAULT_TEMPERATURE_LOWEST_VALUE || _relaySettings.defaultTemperature > DEFAULT_TEMPERATURE_HIGHEST_VALUE ||
-        _relaySettings.temperatureRelay2Interval < TEMPERATURE_RELAY2_LOWEST_VALUE || _relaySettings.temperatureRelay2Interval > TEMPERATURE_RELAY2_HIGHEST_VALUE ||
-        _relaySettings.temperatureRelay3Interval < TEMPERATURE_RELAY3_LOWEST_VALUE || _relaySettings.temperatureRelay3Interval > TEMPERATURE_RELAY3_HIGHEST_VALUE ||
-        _relaySettings.defaultHumidity < DEFAULT_HUMIDITY_LOWEST_VALUE || _relaySettings.defaultHumidity > DEFAULT_HUMIDITY_HIGHEST_VALUE ||
-        _relaySettings.timer1RelayInterval < TIMER1_RELAY_INTERVAL_LOWEST_VALUE || _relaySettings.timer1RelayInterval > TIMER1_RELAY_INTERVAL_HIGHEST_VALUE ||
-        _relaySettings.timer2RelayInterval < TIMER2_RELAY_INTERVAL_LOWEST_VALUE || _relaySettings.timer2RelayInterval > TIMER2_RELAY_INTERVAL_HIGHEST_VALUE ||
-        _relaySettings.timer2TurnOntime < TIMER2_TURN_ON_TIME_LOWEST_VALUE || _relaySettings.timer2TurnOntime > TIMER2_TURN_ON_TIME_HIGHEST_VALUE ||
-        _relaySettings.defaultOxygenLevel < DEFAULT_OXYGEN_LEVEL_LOWEST_VALUE || _relaySettings.defaultOxygenLevel > DEFAULT_OXYGEN_LEVEL_HIGHEST_VALUE
-        )
-        {
-            return false;
-        }
-        
-        return true;
-    }
+		_onIncrease = _increaseHandler[_state];
+		_onDecrease = _decreaseHandler[_state];
 
-    void Configuration::WriteDefaultValuesToEeprom( void )
-    {
-        unsigned char checkSum = 0x00;
-        unsigned int eepromCheckSumAddress = 0x01;
-        unsigned int startingMemoryAddress = 0x02;
-        unsigned int dataMemoryPosition = (unsigned int)&_relaySettings;
-        
-        for (unsigned int i = 0; i < sizeof(RelaySettings); ++i)
-        {
-            checkSum += *((unsigned char *)(dataMemoryPosition + i));
-            _eeprom->Write(startingMemoryAddress + i, *((unsigned char *)(dataMemoryPosition + i)));
-        }
-        
-        _eeprom->Write(eepromCheckSumAddress, checkSum);
-    }
+		if(_state == NumberOfState)
+		{
+			SetToDefaultState();
+		}
+		else
+		{
+			_menu->SetMenuMode(_state);
+		}
+	}
 
-    void Configuration::GetDefaultValues( void )
-    {
-        unsigned int eepromMagicByteAddress = 0x00;
-        unsigned char eepromMagicByteValue = 64;
-        
-        if(_eeprom->Read(eepromMagicByteAddress) != eepromMagicByteValue || !ReadDefaultValuesFromEeprom())
-        {
-            _relaySettings.defaultTemperature = 995;
-            _relaySettings.defaultHumidity = 600;
-            _relaySettings.defaultOxygenLevel = 500;
-            
-            _relaySettings.temperatureRelay2Interval = 60;
-            _relaySettings.temperatureRelay3Interval = 60;
-            
-            _relaySettings.timer1RelayInterval = 900;
-            _relaySettings.timer2RelayInterval = 60; // in minute
-            
-            _relaySettings.timer2TurnOntime = 70;
-            
-            WriteDefaultValuesToEeprom();
-            _eeprom->Write(eepromMagicByteAddress, eepromMagicByteValue);
-        }
-    }
-    
-    void Configuration::SetToDefaultState( void )
-    {
-        _onIncrease = NULL;
-        _onDecrease = NULL;
-        _state = NumberOfState;
-        if(_relayManager->GetApplicationState())
-        {
-            _menu->SetMenuMode(_state);
-        }
-        else
-        {
-            _menu->SetMenuMode(_state + 1); // Run or Configuration Menu
-            _autoStartTimeOutValue = MenuTimeoutValue;
-        }
-    }
+	void Configuration::SetPreviousEventHandler()
+	{
+		RefreshMenuTimeout();
 
-    void Configuration::RefreshMenuTimeout( void )
-    {
-        _menuTimeout = MenuTimeoutValue;
-    }
+		if(_relayManager->GetApplicationState() == false && _state == NumberOfState) // Application is not running
+		{
+			_autoStartTimeOutValue = 0;
+			_relayManager->StartManagingRelays();
+			SetToDefaultState();
+			return;
+		}
 
-    void Configuration::DecrementConfigurationTimeout( void )
-    {
-        static unsigned char loop = 0;
-        loop++;
-        if(loop < TaskDispatcher::GetInterruptRate())
-        {
-            return;
-        }
-        else
-        {
-            loop = 0;
-        }
-        
-        if(_relayManager->GetApplicationState()) // If application already running then handle _menuTimeout
-        {
-            if(_menuTimeout > 0)
-            {
-                _menuTimeout--;
-                if(_menuTimeout == 0)
-                {
-                    _temporaryRelaySettings = _relaySettings;
-                    SetToDefaultState();
-                }
-            }
-        }
-        else // If application is not running i.e. in configuration mode the handle _autoStartTimeOutValue
-        {
-            // Decrement only if default screen is shown and no button is pressed
-            if(_state == NumberOfState && _autoStartTimeOutValue > 0)
-            {
-                _autoStartTimeOutValue--;
-                if(_autoStartTimeOutValue == 0)
-                {
-                    _relayManager->StartManagingRelays();
-                    SetToDefaultState();
-                }
-            }
-        }
-    }
+		if(_state == NumberOfState || _state == 0) // Default state, disable this button
+		{
+			return;
+		}
+		else if(_state == 0)
+		{
+			SetToDefaultState();
+		}
+		else
+		{
+			_state--;
+			_onIncrease = _increaseHandler[_state];
+			_onDecrease = _decreaseHandler[_state];
+		}
 
-    void FriendDecrementConfigurationTimeout( void )
-    {
-        Configuration::_instance->DecrementConfigurationTimeout();
-    }
+		_menu->SetMenuMode(_state);
+	}
+
+	void Configuration::FormatDisplayTime(int number) {
+		int temporaryDisplayHour = _temporaryRelaySettings.relayTimes[number].totalMinutes / 60;
+		if (temporaryDisplayHour >= 12) {
+			_temporaryRelaySettings.relayTimes[number].displayAmPm = 'P';
+			if( temporaryDisplayHour > 12){
+				temporaryDisplayHour -= 12;
+			}
+			} else {
+			_temporaryRelaySettings.relayTimes[number].displayAmPm = 'A';
+			if (temporaryDisplayHour == 0) {
+				temporaryDisplayHour = 12;
+			}
+		}
+
+		_temporaryRelaySettings.relayTimes[number].displayHour = temporaryDisplayHour;
+		_temporaryRelaySettings.relayTimes[number].displayMinute =
+		_temporaryRelaySettings.relayTimes[number].totalMinutes % 60;
+	}
+
+	unsigned char Configuration::GetIncrementAmount(
+	IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType) {
+		unsigned char incrementAmount = 0;
+		switch (increaseDecreaseType) {
+			case IncreaseDecreaseType::Fast:
+			incrementAmount = 10;
+			break;
+			case IncreaseDecreaseType::Faster:
+			incrementAmount = 60;
+			break;
+			default:
+			case IncreaseDecreaseType::Normal:
+			incrementAmount = 1;
+			break;
+		}
+		return incrementAmount;
+	}
+
+	void Configuration::IncreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType, int number){
+		unsigned char incrementAmount = GetIncrementAmount(increaseDecreaseType);
+
+		_temporaryRelaySettings.relayTimes[number].totalMinutes += incrementAmount;
+
+		if (_temporaryRelaySettings.relayTimes[number].totalMinutes > MAXIMUM_MINUTES)
+		{
+			_temporaryRelaySettings.relayTimes[number].totalMinutes = MAXIMUM_MINUTES;
+		}
+
+		FormatDisplayTime(number);
+	}
+
+	void Configuration::DecreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType, int number){
+		unsigned char decrementAmount = GetIncrementAmount(increaseDecreaseType);
+
+		if (_temporaryRelaySettings.relayTimes[number].totalMinutes <= (decrementAmount + (unsigned int)MINIMUM_MINUTES))
+		{
+			_temporaryRelaySettings.relayTimes[number].totalMinutes = MINIMUM_MINUTES;
+		}
+		else
+		{
+			_temporaryRelaySettings.relayTimes[number].totalMinutes -= decrementAmount;
+		}
+
+		FormatDisplayTime(number);
+	}
+
+	void Configuration::IncreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		IncreaseTimeValue(increaseDecreaseType, 0);
+	}
+
+	void Configuration::IncreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		IncreaseTimeValue(increaseDecreaseType, 1);
+	}
+
+	void Configuration::IncreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		IncreaseTimeValue(increaseDecreaseType, 2);
+	}
+
+	void Configuration::IncreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		IncreaseTimeValue(increaseDecreaseType, 3);
+	}
+
+	void Configuration::DecreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		DecreaseTimeValue(increaseDecreaseType, 0);
+	}
+
+	void Configuration::DecreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		DecreaseTimeValue(increaseDecreaseType, 1);
+	}
+
+	void Configuration::DecreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		DecreaseTimeValue(increaseDecreaseType, 2);
+	}
+
+	void Configuration::DecreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		DecreaseTimeValue(increaseDecreaseType, 3);
+	}
+
+	void Configuration::SaveChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		// If application is running this will not be executed, but for more safety (!), return
+		if(_relayManager->GetApplicationState() == true)
+		{
+			return;
+		}
+
+		_relaySettings = _temporaryRelaySettings;
+		WriteDefaultValuesToEeprom();
+		SetToDefaultState();
+
+		RefreshMenuTimeout();
+	}
+
+	void Configuration::DiscardChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+	{
+		_temporaryRelaySettings = _relaySettings;
+		SetToDefaultState();
+		if(_relayManager->GetApplicationState() == false)
+		{
+			RefreshMenuTimeout();
+		}
+	}
+
+	bool Configuration::ReadDefaultValuesFromEeprom( void )
+	{
+		unsigned char calculatedCheckSum = 0x00;
+		unsigned int eepromCheckSumAddress = 0x01;
+		unsigned int startingMemoryAddress = 0x02;
+		unsigned int dataMemoryPosition = (unsigned int)&_relaySettings;
+
+		for (unsigned int i = 0; i < sizeof(RelaySettings); ++i)
+		{
+			*((unsigned char *)(dataMemoryPosition + i)) = _eeprom->Read(startingMemoryAddress + i);
+			calculatedCheckSum += *((unsigned char *)(dataMemoryPosition + i));
+		}
+
+		unsigned char readCheckSum = _eeprom->Read(eepromCheckSumAddress);
+
+		if(
+		readCheckSum != calculatedCheckSum
+		|| _relaySettings.relayTimes[0].totalMinutes > MAXIMUM_MINUTES
+		|| _relaySettings.relayTimes[1].totalMinutes > MAXIMUM_MINUTES
+		|| _relaySettings.relayTimes[2].totalMinutes > MAXIMUM_MINUTES
+		|| _relaySettings.relayTimes[3].totalMinutes > MAXIMUM_MINUTES
+		)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	void Configuration::WriteDefaultValuesToEeprom( void )
+	{
+		unsigned char checkSum = 0x00;
+		unsigned int eepromCheckSumAddress = 0x01;
+		unsigned int startingMemoryAddress = 0x02;
+		unsigned int dataMemoryPosition = (unsigned int)&_relaySettings;
+
+		for (unsigned int i = 0; i < sizeof(RelaySettings); ++i)
+		{
+			checkSum += *((unsigned char *)(dataMemoryPosition + i));
+			_eeprom->Write(startingMemoryAddress + i, *((unsigned char *)(dataMemoryPosition + i)));
+		}
+
+		_eeprom->Write(eepromCheckSumAddress, checkSum);
+	}
+
+	void Configuration::GetDefaultValues( void )
+	{
+		unsigned int eepromMagicByteAddress = 0x00;
+		unsigned char eepromMagicByteValue = 64;
+
+		if(_eeprom->Read(eepromMagicByteAddress) != eepromMagicByteValue || !ReadDefaultValuesFromEeprom())
+		{
+
+			_relaySettings.relayTimes[0].totalMinutes = 180;
+			_relaySettings.relayTimes[0].totalMinutes = 360;
+			_relaySettings.relayTimes[0].totalMinutes = 1140;
+			_relaySettings.relayTimes[0].totalMinutes = 1320;
+
+			WriteDefaultValuesToEeprom();
+			_eeprom->Write(eepromMagicByteAddress, eepromMagicByteValue);
+		}
+	}
+
+	void Configuration::SetToDefaultState( void )
+	{
+		_onIncrease = NULL;
+		_onDecrease = NULL;
+		_state = NumberOfState;
+		if(_relayManager->GetApplicationState())
+		{
+			_menu->SetMenuMode(_state);
+		}
+		else
+		{
+			_menu->SetMenuMode(_state + 1); // Run or Configuration Menu
+			_autoStartTimeOutValue = MenuTimeoutValue;
+		}
+	}
+
+	void Configuration::RefreshMenuTimeout( void )
+	{
+		_menuTimeout = MenuTimeoutValue;
+	}
+
+	void Configuration::DecrementConfigurationTimeout( void )
+	{
+		static unsigned char loop = 0;
+		loop++;
+		if(loop < TaskDispatcher::GetInterruptRate())
+		{
+			return;
+		}
+		else
+		{
+			loop = 0;
+		}
+
+		if(_relayManager->GetApplicationState()) // If application already running then handle _menuTimeout
+		{
+			if(_menuTimeout > 0)
+			{
+				_menuTimeout--;
+				if(_menuTimeout == 0)
+				{
+					_temporaryRelaySettings = _relaySettings;
+					SetToDefaultState();
+				}
+			}
+		}
+		else // If application is not running i.e. in configuration mode the handle _autoStartTimeOutValue
+		{
+			// Decrement only if default screen is shown and no button is pressed
+			if(_state == NumberOfState && _autoStartTimeOutValue > 0)
+			{
+				_autoStartTimeOutValue--;
+				if(_autoStartTimeOutValue == 0)
+				{
+					_relayManager->StartManagingRelays();
+					SetToDefaultState();
+				}
+			}
+		}
+	}
+
+	void FriendDecrementConfigurationTimeout( void )
+	{
+		Configuration::_instance->DecrementConfigurationTimeout();
+	}
 };
