@@ -4,6 +4,7 @@
 #include "../../hal/inc/relay.h"
 #include "../inc/task_dispatcher.h"
 #include "../inc/relay_settings.h"
+#include "../inc/system_time.h"
 
 namespace bll
 {
@@ -12,8 +13,7 @@ namespace bll
         public:
         typedef enum
         {
-            TemperatureRelay1,
-            TemperatureRelay2
+            LightControllerRelay
         } ERelayName;
     };
     
@@ -41,6 +41,8 @@ namespace bll
                
         RelaySettings* _relaySettings;
         
+        SystemTime* _systemTime;
+
         volatile bool _isApplicationRunning;
         
         unsigned int _temperatureRelay2TimerValue;

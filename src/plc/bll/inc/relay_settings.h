@@ -3,7 +3,7 @@
 
 #include "relay_time.h"
 
-#define NUMBER_OF_SETTINGS 2
+#define NUMBER_OF_SETTINGS 4
 typedef struct
 {
     RelayTime relayTimes[NUMBER_OF_SETTINGS];

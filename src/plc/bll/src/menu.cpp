@@ -105,8 +105,8 @@ void Menu::ShowCommonMenu(bool isStart, int number) {
 		sprintf(_lcdStringLine[0], "   End Time: %d", number);
 	}
 
-	sprintf(_lcdStringLine[1], "Curr. Value: %02d:%02d%cM", _defaultRelaySettings->relayTimes[number - 1].displayHour, _defaultRelaySettings->relayTimes[number - 1].displayMinute, _defaultRelaySettings->relayTimes[number - 1].displayAmPm);
-	sprintf(_lcdStringLine[2], "New   Value: %02d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, _defaultRelaySettings->relayTimes[3].displayAmPm);
+	sprintf(_lcdStringLine[1], "Curr. Value: %02d:%02d%cM", _defaultRelaySettings->relayTimes[number - 1].displayHour, _defaultRelaySettings->relayTimes[number - 1].displayMinute, _defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm);
+	sprintf(_lcdStringLine[2], "New   Value: %02d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm);
 	if (*_autoStartTimeOutValue == 0) // This indicates application is running so no "+" or "-" needs to be shown since plus and minus buttons are disabled
 	{
 		sprintf(_lcdStringLine[3], "%c                  %c", (char) ((CustomCharaters::PreviousSign)), (char) ((CustomCharaters::NextSign)));

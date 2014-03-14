@@ -10,9 +10,11 @@ SystemTime::SystemTime( void )
 {
 	_hour = 0;
 	_displayHour = 12;
+	
 	_minute = 0;
 	_second = 0;
-	_amPmChar = 'A';
+	
+	_amPmChar = 'A';				
 
 	TaskDispatcher::GetInstance()->AddTask(FriendUpdateTime);
 }
@@ -86,6 +88,11 @@ void SystemTime::UpdateTime( void )
 			}
 		}
 	}
+}
+
+int SystemTime::GetTimeValueInMinutes( void )
+{
+	return _hour * 60 + _minute;
 }
 
 void FriendUpdateTime(void)

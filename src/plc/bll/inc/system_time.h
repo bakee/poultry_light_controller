@@ -33,6 +33,8 @@ public:
 	int GetSecond(void);
 
 	int GetAmPmChar(void);
+	
+	int GetTimeValueInMinutes( void );
 
 	friend void FriendUpdateTime( void );
 };

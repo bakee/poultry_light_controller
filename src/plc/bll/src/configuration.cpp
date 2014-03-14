@@ -182,12 +182,12 @@ namespace bll
 	void Configuration::FormatDisplayTime(int number) {
 		int temporaryDisplayHour = _temporaryRelaySettings.relayTimes[number].totalMinutes / 60;
 		if (temporaryDisplayHour >= 12) {
-			_temporaryRelaySettings.relayTimes[number].displayAmPm = 'P';
+			_temporaryRelaySettings.relayTimes[number].isDisplayTimeInPm = 1;
 			if( temporaryDisplayHour > 12){
 				temporaryDisplayHour -= 12;
 			}
 			} else {
-			_temporaryRelaySettings.relayTimes[number].displayAmPm = 'A';
+			_temporaryRelaySettings.relayTimes[number].isDisplayTimeInPm = 0;
 			if (temporaryDisplayHour == 0) {
 				temporaryDisplayHour = 12;
 			}
@@ -363,9 +363,9 @@ namespace bll
 		{
 
 			_relaySettings.relayTimes[0].totalMinutes = 180;
-			_relaySettings.relayTimes[0].totalMinutes = 360;
-			_relaySettings.relayTimes[0].totalMinutes = 1140;
-			_relaySettings.relayTimes[0].totalMinutes = 1320;
+			_relaySettings.relayTimes[1].totalMinutes = 360;
+			_relaySettings.relayTimes[2].totalMinutes = 1140;
+			_relaySettings.relayTimes[3].totalMinutes = 1320;
 
 			WriteDefaultValuesToEeprom();
 			_eeprom->Write(eepromMagicByteAddress, eepromMagicByteValue);

@@ -3,10 +3,10 @@
 
 typedef struct
 {
-	unsigned int totalMinutes;
-	unsigned char displayHour;
-	unsigned char displayMinute;
-	char displayAmPm;
+	unsigned totalMinutes : 12;
+	unsigned displayHour : 4;
+	unsigned displayMinute : 6;
+	unsigned isDisplayTimeInPm : 2;
 } RelayTime;
 
 #endif

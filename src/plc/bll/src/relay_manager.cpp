@@ -9,6 +9,8 @@ namespace bll
     {
         _relay = Relay::GetInstance();
         
+        _systemTime = SystemTime::GetInstance();
+
         _isApplicationRunning = false;
         
         _temperatureRelay2TimerValue = 0;
@@ -52,7 +54,13 @@ namespace bll
             return;
         }
 
-		// TODO: handle relay
+        int currentTimeInMinutes = _systemTime->GetTimeValueInMinutes();
+        if((currentTimeInMinutes >= _relaySettings->relayTimes[0].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[1].totalMinutes)
+		|| (currentTimeInMinutes >= _relaySettings->relayTimes[2].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[3].totalMinutes)){
+			TurnOn(RelayName::LightControllerRelay);
+		}else{
+			TurnOff(RelayName::LightControllerRelay);
+		}
     }    
 
     void RelayManager::SetRelaySettings( RelaySettings* relaySettings )
