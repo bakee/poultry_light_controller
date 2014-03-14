@@ -101,7 +101,7 @@ void Menu::ShowCommonMenu(bool isStart, int number, bool canGoBackward, bool can
 	}
 	else
 	{
-		sprintf(_lcdStringLine[2], "New   Value: %2d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm == 0 ? 'A' : 'P');
+		sprintf(_lcdStringLine[2], "New   Value: %2d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_newRelaySettings->relayTimes[number - 1].isDisplayTimeInPm == 0 ? 'A' : 'P');
 		sprintf(_lcdStringLine[3], "%c      -    +      %c", canGoBackward ? (char) ((CustomCharaters::PreviousSign)) : ' ', canGoForward ? (char) ((CustomCharaters::NextSign)) : ' ');
 	}
 }
