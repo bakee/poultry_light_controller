@@ -101,6 +101,7 @@ int SystemTime::GetTimeValueInMinutes( void )
 void SystemTime::SetTime(RelayTime* relayTime){
 	_hour = relayTime->totalMinutes / 60;
 	_minute = relayTime->totalMinutes % 60;
+	_second = 0;
 	FormatDisplayHour();
 }
 
