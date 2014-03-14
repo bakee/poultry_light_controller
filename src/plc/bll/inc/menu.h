@@ -36,7 +36,7 @@ private:
 
 	unsigned char _menuIndex;
 
-	static const unsigned char TotalMenu = 7;
+	static const unsigned char TotalMenu = 8;
 
 	RelaySettings* _defaultRelaySettings;
 
@@ -50,7 +50,7 @@ private:
 
 	MenuHandler _menuHandlers[TotalMenu];
 
-	void ShowCommonMenu ( bool, int );
+	void ShowCommonMenu(bool isStart, int number, bool canGoBackward = true, bool canGoForward = true);
 
 	void ShowStartTime1Menu( void );
 
@@ -66,7 +66,11 @@ private:
 
 	void ShowDefaultMenu( void );
 
+	void ShowSetSystemTimeMenu (void );
+
 	void RefreshLcd( void );
+
+	RelayTime* _temporarySystemTime;
 
 	SystemTime* _systemTime;
 
@@ -74,7 +78,7 @@ public:
 
 	static Menu* GetInstance( void );
 
-	void SetRelaySettings( RelaySettings* defaultRelaySettings, RelaySettings* newRelaySettings, volatile unsigned char* autoStartTimeOutValue );
+	void SetRelaySettings( RelaySettings* defaultRelaySettings, RelaySettings* newRelaySettings, RelayTime* temporarySystemTime, volatile unsigned char* autoStartTimeOutValue );
 
 	void SetMenuMode( unsigned char menuIndex );
 

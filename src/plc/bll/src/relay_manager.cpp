@@ -11,13 +11,7 @@ namespace bll
         
         _systemTime = SystemTime::GetInstance();
 
-        _isApplicationRunning = false;
-        
-        _temperatureRelay2TimerValue = 0;
-        _isTemperatureRelay2TimerEnabled = false;
-        
-        _temperatureRelay3TimerValue = 0;
-        _isTemperatureRelay3TimerEnabled = false;        
+        _isApplicationRunning = false;            
     }
 
     RelayManager* RelayManager::GetInstance()
@@ -55,10 +49,15 @@ namespace bll
         }
 
         int currentTimeInMinutes = _systemTime->GetTimeValueInMinutes();
-        if((currentTimeInMinutes >= _relaySettings->relayTimes[0].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[1].totalMinutes)
-		|| (currentTimeInMinutes >= _relaySettings->relayTimes[2].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[3].totalMinutes)){
+        if(
+        	    (currentTimeInMinutes >= _relaySettings->relayTimes[0].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[1].totalMinutes)
+		     || (currentTimeInMinutes >= _relaySettings->relayTimes[2].totalMinutes && currentTimeInMinutes < _relaySettings->relayTimes[3].totalMinutes)
+		  )
+        {
 			TurnOn(RelayName::LightControllerRelay);
-		}else{
+		}
+        else
+        {
 			TurnOff(RelayName::LightControllerRelay);
 		}
     }    

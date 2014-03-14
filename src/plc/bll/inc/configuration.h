@@ -2,6 +2,7 @@
 #include "../inc/relay_settings.h"
 #include "../inc/menu.h"
 #include "../inc/relay_manager.h"
+#include "../inc/system_time.h"
 
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
@@ -45,6 +46,10 @@ namespace bll
         
         Menu* _menu;
         
+        SystemTime* _systemTime;
+
+        bool _isSystemTimeSet;
+
         RelayManager* _relayManager;
         
         volatile unsigned char _menuTimeout;
@@ -55,6 +60,8 @@ namespace bll
         
         RelaySettings _temporaryRelaySettings; // To store temporary settings
         
+        RelayTime _temporarySystemTime; // To store temporary system time
+
         ButtonHandler _onIncrease;
         
         ButtonHandler _onDecrease;
@@ -80,8 +87,10 @@ namespace bll
         void WriteDefaultValuesToEeprom( void );
         
         void DecrementConfigurationTimeout( void );
-	void FormatDisplayTime(int number);
-	unsigned char GetIncrementAmount(
+
+        void FormatDisplayTime(RelayTime *relayTime);
+
+        unsigned char GetIncrementDecrementAmount(
 			IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType);
 
         public:
@@ -108,17 +117,7 @@ namespace bll
         
         void IncreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
 
-        void IncreaseTemperatureRelay3Interval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void IncreaseDefaultHumidity( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void IncreaseTimer1RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void IncreaseTimer2RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void IncreaseTimer2TurnOntime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void IncreaseDefaultOxygenLevel( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void IncreaseTemporarySystemTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
         void SaveChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
@@ -132,18 +131,14 @@ namespace bll
         
         void DecreaseEndTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseTimer1RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void DecreaseTimer2RelayInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void DecreaseTimer2TurnOntime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
-        
-        void DecreaseDefaultOxygenLevel( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseTemporarySystemTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
         void SetNextEventHandler( void );
         
         void SetPreviousEventHandler( void );
         
+        void SetSystemTime( void );
+
         unsigned char GetState( void )
         {
             return _state;

@@ -73,19 +73,22 @@ void SystemTime::UpdateTime( void )
 				_hour = 0;
 			}
 
-			// Format display hour in 12 hour format
-			_displayHour = _hour;
-			if (_displayHour >= 12) {
-				_amPmChar = 'P';
-				if( _displayHour > 12){
-					_displayHour -= 12;
-				}
-			} else {
-				_amPmChar = 'A';
-				if (_displayHour == 0) {
-					_displayHour = 12;
-				}
-			}
+			FormatDisplayHour();
+		}
+	}
+}
+
+void SystemTime::FormatDisplayHour(void){
+	_displayHour = _hour;
+	if (_displayHour >= 12) {
+		_amPmChar = 'P';
+		if( _displayHour > 12){
+			_displayHour -= 12;
+		}
+	} else {
+		_amPmChar = 'A';
+		if (_displayHour == 0) {
+			_displayHour = 12;
 		}
 	}
 }
@@ -93,6 +96,12 @@ void SystemTime::UpdateTime( void )
 int SystemTime::GetTimeValueInMinutes( void )
 {
 	return _hour * 60 + _minute;
+}
+
+void SystemTime::SetTime(RelayTime* relayTime){
+	_hour = relayTime->totalMinutes / 60;
+	_minute = relayTime->totalMinutes % 60;
+	FormatDisplayHour();
 }
 
 void FriendUpdateTime(void)

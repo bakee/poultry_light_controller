@@ -44,20 +44,7 @@ namespace bll
         SystemTime* _systemTime;
 
         volatile bool _isApplicationRunning;
-        
-        unsigned int _temperatureRelay2TimerValue;
 
-        bool _isTemperatureRelay2TimerEnabled;
-        
-        unsigned int _temperatureRelay3TimerValue;
-        bool _isTemperatureRelay3TimerEnabled;
-        
-        unsigned int _timer1TimeoutValue;
-        
-        unsigned int _timer2TimeoutValue;
-        
-        unsigned int _timer2TurnOnTimeoutValue;
-        
         RelayManager( void );
         
         void DecrementTimeout( void );        

@@ -30,6 +30,7 @@ Menu::Menu( void )
 	_menuHandlers[4] = &Menu::ShowConfirmationMenu;
 	_menuHandlers[5] = &Menu::ShowDefaultMenu;
 	_menuHandlers[6] = &Menu::ShowStartOrConfigureMenu;
+	_menuHandlers[7] = &Menu::ShowSetSystemTimeMenu;
 
 	Lcd::GetInstance()->DefineCustomCharacter(0, customChars, 5);
 	TaskDispatcher::GetInstance()->AddTask(RequestRefreshLcd);
@@ -69,11 +70,12 @@ void Menu::Show( void )
 	}
 }
 
-void Menu::SetRelaySettings( RelaySettings* defaultRelaySettings, RelaySettings* newRelaySettings, volatile unsigned char* autoStartTimeOutValue )
+void Menu::SetRelaySettings( RelaySettings* defaultRelaySettings, RelaySettings* newRelaySettings, RelayTime* temporarySystemTime, volatile unsigned char* autoStartTimeOutValue )
 {
 	_defaultRelaySettings = defaultRelaySettings;
 	_newRelaySettings = newRelaySettings;
 	_autoStartTimeOutValue = autoStartTimeOutValue;
+	_temporarySystemTime = temporarySystemTime;
 }
 
 void Menu::SetMenuMode( unsigned char menuIndex )
@@ -81,22 +83,7 @@ void Menu::SetMenuMode( unsigned char menuIndex )
 	_menuIndex = menuIndex;
 }
 
-void Menu::ShowStartTime1Menu( void )
-{
-	ShowCommonMenu(true, 1);
-}
-
-void Menu::ShowEndTime1Menu( void )
-{
-	ShowCommonMenu(false, 2);
-}
-
-void Menu::ShowStartTime2Menu( void )
-{
-	ShowCommonMenu(true, 3);
-}
-
-void Menu::ShowCommonMenu(bool isStart, int number) {
+void Menu::ShowCommonMenu(bool isStart, int number, bool canGoBackward, bool canGoForward) {
 	if(isStart)
 	{
 		sprintf(_lcdStringLine[0], "   Start Time: %d", number);
@@ -109,17 +96,32 @@ void Menu::ShowCommonMenu(bool isStart, int number) {
 	sprintf(_lcdStringLine[2], "New   Value: %02d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm);
 	if (*_autoStartTimeOutValue == 0) // This indicates application is running so no "+" or "-" needs to be shown since plus and minus buttons are disabled
 	{
-		sprintf(_lcdStringLine[3], "%c                  %c", (char) ((CustomCharaters::PreviousSign)), (char) ((CustomCharaters::NextSign)));
+		sprintf(_lcdStringLine[3], "%c                  %c", canGoBackward ? (char) ((CustomCharaters::PreviousSign)) : ' ', canGoForward ? (char) ((CustomCharaters::NextSign)) : ' ');
 	}
 	else
 	{
-		sprintf(_lcdStringLine[3], "%c      -    +      %c", (char) ((CustomCharaters::PreviousSign)), (char) ((CustomCharaters::NextSign)));
+		sprintf(_lcdStringLine[3], "%c      -    +      %c", canGoBackward ? (char) ((CustomCharaters::PreviousSign)) : ' ', canGoForward ? (char) ((CustomCharaters::NextSign)) : ' ');
 	}
+}
+
+void Menu::ShowStartTime1Menu( void )
+{
+	ShowCommonMenu(true, 1, false);
+}
+
+void Menu::ShowEndTime1Menu( void )
+{
+	ShowCommonMenu(false, 2);
+}
+
+void Menu::ShowStartTime2Menu( void )
+{
+	ShowCommonMenu(true, 3);
 }
 
 void Menu::ShowEndTime2Menu( void )
 {
-	ShowCommonMenu(false, 4);
+	ShowCommonMenu(false, 4, true, false);
 }
 
 void Menu::ShowConfirmationMenu( void )
@@ -136,6 +138,14 @@ void Menu::ShowStartOrConfigureMenu( void )
 	sprintf(_lcdStringLine[1]," ");
 	sprintf(_lcdStringLine[2],"Auto Start in %02d sec", *_autoStartTimeOutValue);
 	sprintf(_lcdStringLine[3],"Start      Configure");
+}
+
+void Menu::ShowSetSystemTimeMenu( void )
+{
+	sprintf(_lcdStringLine[0],"  Set System Time");
+	sprintf(_lcdStringLine[1]," ");
+	sprintf(_lcdStringLine[2],"  Time: %02d:%02d %cM", _temporarySystemTime->displayHour, _temporarySystemTime->displayMinute, _temporarySystemTime->isDisplayTimeInPm == 0 ? 'A' : 'P');
+	sprintf(_lcdStringLine[3],"       -    +     OK");
 }
 
 void Menu::ShowDefaultMenu( void )

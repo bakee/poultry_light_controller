@@ -2,6 +2,7 @@
 #define SYSTEM_TIME_H_
 
 #include "../../hal/inc/hal_utils.h"
+#include "../inc/relay_time.h"
 
 namespace bll
 {
@@ -22,6 +23,8 @@ private:
 
 	void UpdateTime( void );
 
+	void FormatDisplayHour( void );
+
 public:
 
 	static SystemTime* GetInstance( void );
@@ -35,6 +38,8 @@ public:
 	int GetAmPmChar(void);
 	
 	int GetTimeValueInMinutes( void );
+
+	void SetTime(RelayTime* relayTime);
 
 	friend void FriendUpdateTime( void );
 };
