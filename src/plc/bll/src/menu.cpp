@@ -86,20 +86,22 @@ void Menu::SetMenuMode( unsigned char menuIndex )
 void Menu::ShowCommonMenu(bool isStart, int number, bool canGoBackward, bool canGoForward) {
 	if(isStart)
 	{
-		sprintf(_lcdStringLine[0], "   Start Time: %d", number);
+		sprintf(_lcdStringLine[0], "   Start Time: %d", (number + 1) / 2);
 	}else
 	{
-		sprintf(_lcdStringLine[0], "   End Time: %d", number);
+		sprintf(_lcdStringLine[0], "     End Time: %d", (number + 1) / 2);
 	}
 
-	sprintf(_lcdStringLine[1], "Curr. Value: %02d:%02d%cM", _defaultRelaySettings->relayTimes[number - 1].displayHour, _defaultRelaySettings->relayTimes[number - 1].displayMinute, _defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm);
-	sprintf(_lcdStringLine[2], "New   Value: %02d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm);
+	sprintf(_lcdStringLine[1], "Curr. Value: %2d:%02d%cM", _defaultRelaySettings->relayTimes[number - 1].displayHour, _defaultRelaySettings->relayTimes[number - 1].displayMinute, _defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm == 0 ? 'A' : 'P');
+
 	if (*_autoStartTimeOutValue == 0) // This indicates application is running so no "+" or "-" needs to be shown since plus and minus buttons are disabled
 	{
+		sprintf(_lcdStringLine[2], " ");
 		sprintf(_lcdStringLine[3], "%c                  %c", canGoBackward ? (char) ((CustomCharaters::PreviousSign)) : ' ', canGoForward ? (char) ((CustomCharaters::NextSign)) : ' ');
 	}
 	else
 	{
+		sprintf(_lcdStringLine[2], "New   Value: %2d:%02d%cM", _newRelaySettings->relayTimes[number - 1].displayHour, _newRelaySettings->relayTimes[number - 1].displayMinute, (char)_defaultRelaySettings->relayTimes[number - 1].isDisplayTimeInPm == 0 ? 'A' : 'P');
 		sprintf(_lcdStringLine[3], "%c      -    +      %c", canGoBackward ? (char) ((CustomCharaters::PreviousSign)) : ' ', canGoForward ? (char) ((CustomCharaters::NextSign)) : ' ');
 	}
 }
@@ -144,7 +146,7 @@ void Menu::ShowSetSystemTimeMenu( void )
 {
 	sprintf(_lcdStringLine[0],"  Set System Time");
 	sprintf(_lcdStringLine[1]," ");
-	sprintf(_lcdStringLine[2],"  Time: %02d:%02d %cM", _temporarySystemTime->displayHour, _temporarySystemTime->displayMinute, _temporarySystemTime->isDisplayTimeInPm == 0 ? 'A' : 'P');
+	sprintf(_lcdStringLine[2],"  Time: %2d:%02d %cM", _temporarySystemTime->displayHour, _temporarySystemTime->displayMinute, _temporarySystemTime->isDisplayTimeInPm == 0 ? 'A' : 'P');
 	sprintf(_lcdStringLine[3],"       -    +     OK");
 }
 
@@ -153,7 +155,7 @@ void Menu::ShowDefaultMenu( void )
 	sprintf(_lcdStringLine[0],"  LIGHT CONTROLLER");
 	sprintf(_lcdStringLine[1]," ");
 	sprintf(_lcdStringLine[2],"Mobile: 01714228422");
-	sprintf(_lcdStringLine[3],"  Time: %02d:%02d:%02d %cM", _systemTime->GetHour(), _systemTime->GetMinute(), _systemTime->GetSecond(), _systemTime->GetAmPmChar());
+	sprintf(_lcdStringLine[3],"  Time: %2d:%02d:%02d %cM", _systemTime->GetHour(), _systemTime->GetMinute(), _systemTime->GetSecond(), _systemTime->GetAmPmChar());
 }
 
 void Menu::ShowFirmwareVersionMenu( void )

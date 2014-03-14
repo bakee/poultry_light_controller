@@ -5,18 +5,6 @@
 #define NULL 0
 #endif
 
-#define START_TIME_1_HOUR_VALUE 3 // 3 for 03:xx AM
-#define START_TIME_1_MINUTE_VALUE 0 // 0 for xx:00 XM
-
-#define END_TIME_1_HOUR_VALUE 6 // 6 for 06:xx AM
-#define END_TIME_1_MINUTE_VALUE 0 // 0 for xx:00 XM
-
-#define START_TIME_2_HOUR_VALUE 17 // 17 for 05:xx PM
-#define START_TIME_2_MINUTE_VALUE 00 // 0 for xx:00 XM
-
-#define END_TIME_2_HOUR_VALUE 21 // 21 for 09:xx PM
-#define END_TIME_2_MINUTE_VALUE 0 // 0 for xx:00 XM
-
 #define MAXIMUM_MINUTES 1439 // 11:59 PM
 #define MINIMUM_MINUTES 0 // 12:00 AM
 
@@ -203,7 +191,7 @@ void Configuration::SetPreviousEventHandler()
 
 void Configuration::FormatDisplayTime(RelayTime *relayTime) {
 
-	int temporaryDisplayHour = relayTime->totalMinutes / 60;
+	unsigned int temporaryDisplayHour = ((unsigned int)relayTime->totalMinutes) / 60;
 	if (temporaryDisplayHour >= 12) {
 		relayTime->isDisplayTimeInPm = 1;
 		if( temporaryDisplayHour > 12){
@@ -441,11 +429,15 @@ void Configuration::GetDefaultValues( void )
 	if(_eeprom->Read(eepromMagicByteAddress) != eepromMagicByteValue || !ReadDefaultValuesFromEeprom())
 	{
 
-		_relaySettings.relayTimes[0].totalMinutes = 180;
-		_relaySettings.relayTimes[1].totalMinutes = 360;
-		_relaySettings.relayTimes[2].totalMinutes = 1140;
-		_relaySettings.relayTimes[3].totalMinutes = 1320;
-
+		_relaySettings.relayTimes[0].totalMinutes = 180; // 3:00 AM
+		_relaySettings.relayTimes[1].totalMinutes = 360; // 6:00 AM
+		_relaySettings.relayTimes[2].totalMinutes = 1140; // 7:00 PM
+		_relaySettings.relayTimes[3].totalMinutes = 1320; // 10:00 PM
+		
+		for(int i = 0; i < 4; ++i){
+			FormatDisplayTime(&_relaySettings.relayTimes[i]);
+		}
+		
 		WriteDefaultValuesToEeprom();
 		_eeprom->Write(eepromMagicByteAddress, eepromMagicByteValue);
 	}

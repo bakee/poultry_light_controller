@@ -68,6 +68,7 @@ void SystemTime::UpdateTime( void )
 		_second = 0;
 		_minute++;
 		if(_minute > 59){
+			_minute = 0;
 			_hour++;
 			if(_hour > 23){
 				_hour = 0;
