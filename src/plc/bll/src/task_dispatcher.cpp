@@ -2,9 +2,9 @@
 #include "../../hal/inc/timer0.h"
 
 //#define TIMER0_INTERRUPT_RATE 1
-//#define TIMER0_INTERRUPT_RATE 2
+#define TIMER0_INTERRUPT_RATE 2
 //#define TIMER0_INTERRUPT_RATE 4
-#define TIMER0_INTERRUPT_RATE 16
+//#define TIMER0_INTERRUPT_RATE 16
 //#define TIMER0_INTERRUPT_RATE 128
 
 namespace bll
@@ -65,7 +65,7 @@ namespace bll
         }
     }
 
-    unsigned char TaskDispatcher::GetInterruptRate( void )
+    unsigned int TaskDispatcher::GetInterruptRate( void )
     {
         return TIMER0_INTERRUPT_RATE;
     }

@@ -75,6 +75,7 @@ namespace bll
     void Button::OnPlusButtonReleased( void )
     {
         _isPlusButtonPressed = false;
+        _numberOfSecondsPassed = 0;
     }
 
     void Button::OnMinusButtonPressed( void )
@@ -92,6 +93,7 @@ namespace bll
     void Button::OnMinusButtonReleased( void )
     {
         _isMinusButtonPressed = false;
+        _numberOfSecondsPassed = 0;
     }
 
     void Button::OnBackButtonPressed( void )
@@ -99,49 +101,47 @@ namespace bll
         _configuration->SetPreviousEventHandler();
     }
 
+    IncreaseDecreaseType::EIncreaseDecreaseType Button::GetLongPressMode(){
+
+    	IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType = IncreaseDecreaseType::None;
+
+        if(_numberOfSecondsPassed <= TaskDispatcher::GetInterruptRate() * 2) // For the first 2 second do nothing
+        {
+            _numberOfSecondsPassed++;
+        }
+        else if (_numberOfSecondsPassed <= TaskDispatcher::GetInterruptRate() * 7) // For the next 5 seconds, increase normally
+        {
+            _numberOfSecondsPassed++;
+            increaseDecreaseType = IncreaseDecreaseType::Normal;
+        }
+        else if (_numberOfSecondsPassed <= TaskDispatcher::GetInterruptRate() * 12) // For the next 5 seconds, increase fast
+        {
+            _numberOfSecondsPassed++;
+            increaseDecreaseType = IncreaseDecreaseType::Fast;
+        }
+        else // For the next seconds, increase faster
+        {
+        	increaseDecreaseType = IncreaseDecreaseType::Faster;
+        }
+
+        return increaseDecreaseType;
+    }
+
     void Button::OnButtonLongPressed( void )
     {
+    	 IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType = GetLongPressMode();
+
+    	 if(increaseDecreaseType == IncreaseDecreaseType::None){
+    		 return;
+    	 }
+
         if(_isPlusButtonPressed) // TODO: need to add another condition to detect whether the button is still being pressed or not
         {
-            if(TaskDispatcher::GetInterruptRate() > _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-            }
-            else if (TaskDispatcher::GetInterruptRate() * 5 >= _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-                _configuration->IncreaseValue(IncreaseDecreaseType::Normal);
-            }
-            else if ( TaskDispatcher::GetInterruptRate() * 10 >= _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-                _configuration->IncreaseValue(IncreaseDecreaseType::Fast);
-            }
-            else
-            {
-                _configuration->IncreaseValue(IncreaseDecreaseType::Faster);
-            }
+        	_configuration->IncreaseValue(increaseDecreaseType);
         }
         else if(_isMinusButtonPressed) // TODO: need to add another condition to detect whether the button is still being pressed or not
         {
-            if(TaskDispatcher::GetInterruptRate() > _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-            }
-            else if (TaskDispatcher::GetInterruptRate() * 5 >= _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-                _configuration->DecreaseValue(IncreaseDecreaseType::Normal);
-            }
-            else if (TaskDispatcher::GetInterruptRate() * 10 >= _numberOfSecondsPassed)
-            {
-                _numberOfSecondsPassed++;
-                _configuration->DecreaseValue(IncreaseDecreaseType::Fast);
-            }
-            else
-            {
-                _configuration->DecreaseValue(IncreaseDecreaseType::Faster);
-            }
+        	_configuration->DecreaseValue(increaseDecreaseType);
         }
     }
 

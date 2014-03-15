@@ -27,7 +27,7 @@ namespace bll
 
         static TaskDispatcher* GetInstance( void );
 
-        static unsigned char GetInterruptRate( void );
+        static unsigned int GetInterruptRate( void );
 
         void AddTask( Task task );
 

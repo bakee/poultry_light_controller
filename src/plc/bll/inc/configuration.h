@@ -23,6 +23,7 @@ namespace bll
         public:
         typedef enum
         {
+        	None,
             Normal,
             Fast,
             Faster

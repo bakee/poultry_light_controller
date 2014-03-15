@@ -48,7 +48,7 @@ namespace bll
 
         volatile bool _isMinusButtonPressed;
 
-        volatile unsigned char _numberOfSecondsPassed;   
+        volatile unsigned int _numberOfSecondsPassed;
                     
         Button( void );        
 
@@ -66,6 +66,8 @@ namespace bll
       
         void OnButtonLongPressed( void );
         
+        IncreaseDecreaseType::EIncreaseDecreaseType GetLongPressMode( void );
+
         public:        
 
         static Button* GetInstance( void );  
