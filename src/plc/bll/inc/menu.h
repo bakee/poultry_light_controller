@@ -52,9 +52,9 @@ private:
 
 	void ShowCommonMenu(bool isStart, int number, bool canGoBackward = true, bool canGoForward = true);
 
-	void ShowStartTime1Menu( void );
+	void ShowIntervalMenu( void );
 
-	void ShowEndTime1Menu( void );
+	void ShowKeepOnTimeMenu( void );
 
 	void ShowStartTime2Menu( void );
 

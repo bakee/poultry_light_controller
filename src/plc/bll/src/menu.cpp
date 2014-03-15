@@ -23,8 +23,8 @@ Menu::Menu( void )
 	_autoStartTimeOutValue = NULL;
 	_menuIndex = TotalMenu - 1;
 
-	_menuHandlers[0] = &Menu::ShowStartTime1Menu;
-	_menuHandlers[1] = &Menu::ShowEndTime1Menu;
+	_menuHandlers[0] = &Menu::ShowIntervalMenu;
+	_menuHandlers[1] = &Menu::ShowKeepOnTimeMenu;
 	_menuHandlers[2] = &Menu::ShowStartTime2Menu;
 	_menuHandlers[3] = &Menu::ShowEndTime2Menu;
 	_menuHandlers[4] = &Menu::ShowConfirmationMenu;
@@ -106,12 +106,12 @@ void Menu::ShowCommonMenu(bool isStart, int number, bool canGoBackward, bool can
 	}
 }
 
-void Menu::ShowStartTime1Menu( void )
+void Menu::ShowIntervalMenu( void )
 {
 	ShowCommonMenu(true, 1, false);
 }
 
-void Menu::ShowEndTime1Menu( void )
+void Menu::ShowKeepOnTimeMenu( void )
 {
 	ShowCommonMenu(false, 2);
 }
@@ -152,8 +152,8 @@ void Menu::ShowSetSystemTimeMenu( void )
 
 void Menu::ShowDefaultMenu( void )
 {
-	sprintf(_lcdStringLine[0],"  LIGHT CONTROLLER");
-	sprintf(_lcdStringLine[1]," ");
+	sprintf(_lcdStringLine[0],"      ADHUNIK");
+	sprintf(_lcdStringLine[1],"  LIGHT CONTROLLER");
 	sprintf(_lcdStringLine[2],"Mobile: 01714228422");
 	sprintf(_lcdStringLine[3],"  Time: %2d:%02d:%02d %cM", _systemTime->GetHour(), _systemTime->GetMinute(), _systemTime->GetSecond(), _systemTime->GetAmPmChar());
 }

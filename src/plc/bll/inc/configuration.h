@@ -110,9 +110,9 @@ namespace bll
 
         void DecreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType, int number);
 
-        void IncreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void IncreaseInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void IncreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void IncreaseKeepOnTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
 
         void IncreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
@@ -124,9 +124,9 @@ namespace bll
         
         void DiscardChanges( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
-        void DecreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
+        void DecreaseKeepOnTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         
         void DecreaseStartTime2Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType );
         

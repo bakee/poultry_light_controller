@@ -41,14 +41,14 @@ Configuration::Configuration( void )
 	_eeprom = Eeprom::GetInstance();
 
 
-	_increaseHandler[0] = &Configuration::IncreaseStartTime1Value;
-	_increaseHandler[1] = &Configuration::IncreaseEndTime1Value;
+	_increaseHandler[0] = &Configuration::IncreaseInterval;
+	_increaseHandler[1] = &Configuration::IncreaseKeepOnTime;
 	_increaseHandler[2] = &Configuration::IncreaseStartTime2Value;
 	_increaseHandler[3] = &Configuration::IncreaseEndTime2Value;
 	_increaseHandler[4] = &Configuration::SaveChanges;
 
-	_decreaseHandler[0] = &Configuration::DecreaseStartTime1Value;
-	_decreaseHandler[1] = &Configuration::DecreaseEndTime1Value;
+	_decreaseHandler[0] = &Configuration::DecreaseInterval;
+	_decreaseHandler[1] = &Configuration::DecreaseKeepOnTime;
 	_decreaseHandler[2] = &Configuration::DecreaseStartTime2Value;
 	_decreaseHandler[3] = &Configuration::DecreaseEndTime2Value;
 	_decreaseHandler[4] = &Configuration::DiscardChanges;
@@ -254,12 +254,12 @@ void Configuration::DecreaseTimeValue(IncreaseDecreaseType::EIncreaseDecreaseTyp
 	FormatDisplayTime(&_temporaryRelaySettings.relayTimes[number]);
 }
 
-void Configuration::IncreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+void Configuration::IncreaseInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
 {
 	IncreaseTimeValue(increaseDecreaseType, 0);
 }
 
-void Configuration::IncreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+void Configuration::IncreaseKeepOnTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
 {
 	IncreaseTimeValue(increaseDecreaseType, 1);
 }
@@ -299,12 +299,12 @@ void Configuration::IncreaseTemporarySystemTime( IncreaseDecreaseType::EIncrease
 	FormatDisplayTime(&_temporarySystemTime);
 }
 
-void Configuration::DecreaseStartTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+void Configuration::DecreaseInterval( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
 {
 	DecreaseTimeValue(increaseDecreaseType, 0);
 }
 
-void Configuration::DecreaseEndTime1Value( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
+void Configuration::DecreaseKeepOnTime( IncreaseDecreaseType::EIncreaseDecreaseType increaseDecreaseType )
 {
 	DecreaseTimeValue(increaseDecreaseType, 1);
 }
